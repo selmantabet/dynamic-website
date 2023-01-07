@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel=stylesheet type=text/css href="{{ url_for('static',
+filename='style.css') }}">
+<title>Let's Blog!</title>
+</head>
+<body>
+<div id="header">
+<a href="{{ url_for('home') }}" class="header">Home</a>&nbsp
+<a href="{{ url_for('about') }}" class="header">About Us</a>&nbsp
+<a href="{{ url_for('register') }}" class="header">Register</a>
+<a href="{{ url_for('login') }}" class="header">Login</a>
+<a href="{{ url_for('logout') }}" class="header">Logout</a>
+</div>
+
+<div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</div>
+
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>

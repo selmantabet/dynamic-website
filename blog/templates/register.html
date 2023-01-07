@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST" action="">
+  {{ form.csrf_token }}
+  <p>{{ form.username.label }} {{ form.username }}</p>
+  <p>{{ form.confirm_username.label }} {{ form.confirm_username }}</p>
+  <p>{{ form.password.label }} {{ form.password }}</p>
+  <input type="submit" value="Register">
+</form>
+
+{% for error in form.username.errors %}
+  <span style="color: red;">[{{ error }}]</span>
+{% endfor %}
+
+
+{% endblock content %}
