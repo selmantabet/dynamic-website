@@ -1,4 +1,7 @@
+# Initilaize the Flask app
 from blog import app
+
+# Initialize the routes, models and forms
 import blog.models
 import blog.forms
 import blog.routes
