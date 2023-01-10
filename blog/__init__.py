@@ -5,14 +5,13 @@ from .config import cfg
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '<insert your secret key here>'
+app.config['SECRET_KEY'] = '64c81e139e3c113ecf8393abeaf83028196ca82e2acf2a3a'
 
 # DB Connection changed to mysql
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://USERNAME:PASSWORD@csmysql.cs.cf.ac.uk:3306/USERNAME_DATABASE_NAME'
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config.from_object(cfg)
-
-
+print("DB URI: ", app.config['SQLALCHEMY_DATABASE_URI'])
+# print("Tracking: ", app.config['SQLALCHEMY_TRACK_MODIFICATIONS'])
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
