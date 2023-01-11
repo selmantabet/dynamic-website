@@ -1,9 +1,15 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <form method="POST" action="">
   {{ form.csrf_token }}
   <p>{{ form.username.label }} {{ form.username }}</p>
   <p>{{ form.password.label }} {{ form.password }}</p>
-  <p><input type="submit" value="Login"></p>
+  <div class="field">
+    <label class="checkbox">
+      <input type="checkbox" name="remember" />
+      Remember me
+    </label>
+  </div>
+  <p><input type="submit" value="Login" /></p>
+  <p><a href="{{url_for('register')}}">Don't have an account?</a></p>
 </form>
 {% endblock content %}
