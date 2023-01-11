@@ -17,4 +17,5 @@ with app.app_context():
     db.create_all()
     print("DB created at ", app.config['SQLALCHEMY_DATABASE_URI'])
 login_manager = LoginManager()
+login_manager.login_view = 'login'  # Go here if accessed a restricted page
 login_manager.init_app(app)
