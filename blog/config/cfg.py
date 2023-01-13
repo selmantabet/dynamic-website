@@ -1,14 +1,14 @@
 from dotenv import load_dotenv
 import os
 
+# Based on a self-developed config script used in Snoonu Qatar's backend FalconFlex system.
+
 cwd = os.getcwd()
 base_env_path = os.path.join(cwd, "blog", "env", "base.env")
 print("base env path: ", base_env_path)
 if (os.path.exists(base_env_path)):
     load_dotenv(dotenv_path=base_env_path)
     print("base env vars initialized from config")
-
-# Need a method to distinguish between dev and prod
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False  # Suppresses SQLAlchemy warnings
 
