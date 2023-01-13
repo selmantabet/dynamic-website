@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="{{session['mode']}}">
   <head>
     <meta charset="utf-8" />
     <link
@@ -13,7 +13,7 @@
     <title>Let's Blog!</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light">
       <a class="navbar-brand" href="#">Selman's Blog</a>
       <button
         class="navbar-toggler"
@@ -71,7 +71,11 @@
           </li>
 
           {% endif %}
-
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('toggle_mode') }}"
+              >Toggle Color</a
+            >
+          </li>
           <!-- <li class="nav-item">
             <a
               class="nav-link disabled"

@@ -1,4 +1,4 @@
-from flask import render_template, url_for, request, redirect, flash
+from flask import render_template, url_for, request, redirect, flash, session
 from blog import app
 from blog.forms import RegistrationForm, LoginForm
 from flask_login import login_user, logout_user, current_user, login_required
@@ -77,3 +77,9 @@ def account():
 @login_required
 def create():
     return render_template('create.html', title='Create Post')
+
+
+@app.route("/toggle_mode")
+def toggle_mode():
+    session['mode'] = 'dark' if session.get('mode') == 'light' else 'light'
+    return redirect(url_for('home'))
