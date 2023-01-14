@@ -24,6 +24,13 @@ def post(post_id):
     return render_template('post.html', title=post.title, post=post)
 
 
+@app.route("/user/<int:user_id>")
+def user(user_id):
+    from blog.models import User
+    user = User.query.get_or_404(user_id)
+    return render_template('user.html', user=user)
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()

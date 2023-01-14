@@ -4,7 +4,8 @@
   <p><a href="{{ url_for('post', post_id=post.id) }}">
     <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p>
     <p>  "{{ post.title }}"</a></p>
-    <p>by {{ post.user.username }}</p>
+    <p>by <a href="{{ url_for('user', user_id = post.user.id) }}"
+      >{{ post.user.username }}</a></p>
     <p>{{ post.content }}</p>
 {% endfor %}
 {% endblock content %}
