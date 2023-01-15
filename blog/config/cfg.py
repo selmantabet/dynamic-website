@@ -10,6 +10,8 @@ if (os.path.exists(base_env_path)):
     load_dotenv(dotenv_path=base_env_path)
     print("base env vars initialized from config")
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 SQLALCHEMY_TRACK_MODIFICATIONS = False  # Suppresses SQLAlchemy warnings
 
 # Load the dev env vars anyway, for now
@@ -19,8 +21,8 @@ if (os.path.exists(dev_env_path)):
     load_dotenv(dotenv_path=dev_env_path)
     print("dev env vars initialized from config")
 
-if os.environ.get("ENV_TYPE") == "GITLAB":
-    print("GITLAB deployment detected.")
+if os.environ.get("ENV_TYPE") == "OPENSHIFT":
+    print("OpenShift deployment detected.")
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
         dbuser=os.environ["MYSQL_USER"],
         dbpass=os.environ["MYSQL_PASSWORD"],
