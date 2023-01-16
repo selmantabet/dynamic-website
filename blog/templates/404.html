@@ -1,0 +1,9 @@
+
+{% extends "layout.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block body %}
+  
+  <h1>The page you are looking for was not found.</h1>
+  <a href="{{ url_for('home') }}"><p>Click Here</a>To go to the Home Page</p>
+
+{% endblock %}

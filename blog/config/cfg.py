@@ -21,8 +21,11 @@ if (os.path.exists(dev_env_path)):
     load_dotenv(dotenv_path=dev_env_path)
     print("dev env vars initialized from config")
 
-if os.environ.get("ENV_TYPE") == "OPENSHIFT":
-    print("OpenShift deployment detected.")
+if os.environ.get("ENV_TYPE") == "OPENSHIFT" or os.environ.get("ENV_TYPE") == "STAGING":
+    if os.environ["ENV_TYPE"] == "STAGING":
+        print("Staging deployment detected.")
+    else:
+        print("OpenShift deployment detected.")
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
         dbuser=os.environ["MYSQL_USER"],
         dbpass=os.environ["MYSQL_PASSWORD"],
@@ -52,4 +55,4 @@ else:
         )
     else:
         SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
-            os.path.join(cwd, "blog", 'blog.db')
+            os.path.join(cwd, "blog", 'blog_dev.db')

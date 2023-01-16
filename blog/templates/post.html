@@ -6,5 +6,18 @@
     >{{ post.user.username }}</a
   >
 </p>
+<!-- Put some media here -->
 <p>{{ post.content }}</p>
-{% endblock content %}
+{% for comment in comments %}
+<div>
+  <p>
+    Comment by:
+    <a href="{{ url_for('user', user_id = comment.author_id) }}"
+      >{{ comment.author_id }}</a
+    >
+  </p>
+  <p>{{ comment.content }}</p>
+  <p>{{ comment.date }}</p>
+</div>
+{% endfor %} {% endblock content %}
+<!-- Put comments here -->

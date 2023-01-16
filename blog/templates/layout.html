@@ -2,6 +2,7 @@
 <html data-bs-theme="{{session['mode']}}">
   <head>
     <meta charset="utf-8" />
+    <!-- The link tag below is for Bootstrap 5.3.0 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,9 +16,10 @@
       type="image/x-icon"
       href="{{ url_for('static', filename='img/favicon.ico') }}"
     />
-    <title>Let's Blog!</title>
+    <title>Selman's Blog!</title>
   </head>
   <body>
+    <!-- The Navbar is based on an implementation from the Bootstrap docs on https://getbootstrap.com/docs/5.3/components/navbar/ -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('home') }}"
@@ -28,7 +30,7 @@
             height="30"
             class="d-inline-block align-text-top"
           />
-          Selman's Site</a
+          Selman's Blog</a
         >
         <button
           class="navbar-toggler"
@@ -87,9 +89,19 @@
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
                 <li><hr class="dropdown-divider" /></li>
+                {% if session['mode'] == 'dark' %}
                 <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item" href="{{ url_for('toggle_mode') }}"
+                    >Light Mode > <i class="fa-solid fa-sun"></i
+                  ></a>
                 </li>
+                {% else %}
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('toggle_mode') }}"
+                    >Dark Mode > <i class="fa-solid fa-moon"></i
+                  ></a>
+                </li>
+                {% endif %}
               </ul>
             </li>
             <li class="nav-item">
@@ -98,14 +110,14 @@
             {% if session['mode'] == 'dark' %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('toggle_mode') }}"
-                >Light Mode</a
-              >
+                ><i class="fa-solid fa-sun"></i
+              ></a>
             </li>
             {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('toggle_mode') }}"
-                >Dark Mode</a
-              >
+                ><i class="fa-solid fa-moon"></i
+              ></a>
             </li>
             {% endif %}
           </ul>
@@ -147,6 +159,11 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Where the moon and sun icons for the dark/light modes come from -->
+    <script
+      src="https://kit.fontawesome.com/96ce01b4f5.js"
       crossorigin="anonymous"
     ></script>
   </body>

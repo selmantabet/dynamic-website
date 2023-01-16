@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp
 
 
@@ -22,3 +22,16 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = StringField('Content', validators=[DataRequired()])
+    # picture = FileField('Update Picture', validators=[
+    #                     FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Post')
+
+
+class CommentForm(FlaskForm):
+    content = StringField('Content', validators=[DataRequired()])
+    submit = SubmitField('Comment')
