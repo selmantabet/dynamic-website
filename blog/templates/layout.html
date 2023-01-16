@@ -66,7 +66,11 @@
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('account') }}">My Account</a>
+              <a
+                class="nav-link"
+                href="{{ url_for('user', user_id = current_user.id) }}"
+                >My Profile</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('create') }}">New Post</a>
@@ -83,13 +87,19 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Dropdown
+                Settings
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                {% if current_user.is_authenticated and current_user.is_active
+                %}
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('account') }}"
+                    >My Account</a
+                  >
+                </li>
+
                 <li><hr class="dropdown-divider" /></li>
-                {% if session['mode'] == 'dark' %}
+                {% endif %} {% if session['mode'] == 'dark' %}
                 <li>
                   <a class="dropdown-item" href="{{ url_for('toggle_mode') }}"
                     >Light Mode > <i class="fa-solid fa-sun"></i
