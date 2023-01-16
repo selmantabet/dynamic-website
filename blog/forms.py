@@ -5,9 +5,10 @@ from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Regexp(
-        '^[a-z]{6,8}$', message='Your username should be between 6 and 8 characters long, and can only contain lowercase letters.'), EqualTo('confirm_username', message='Usernames do not match. Try again')])
-    confirm_username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+        '^[a-z]{6,8}$', message='Your username should be between 6 and 8 characters long, and can only contain lowercase letters.')])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo(
+        'confirm_password', message='Passwords do not match. Try again')])
+    confirm_password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -35,3 +36,8 @@ class PostForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = StringField('Content', validators=[DataRequired()])
     submit = SubmitField('Comment')
+
+
+class SettingsForm(FlaskForm):
+    # submit = SubmitField('Save')
+    deactivate = SubmitField('Deactivate Account')

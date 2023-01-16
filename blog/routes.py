@@ -1,6 +1,6 @@
 from flask import render_template, url_for, request, redirect, flash, session
 from blog import app
-from blog.forms import RegistrationForm, LoginForm
+from blog.forms import RegistrationForm, LoginForm, SettingsForm, PostForm, CommentForm
 from flask_login import login_user, logout_user, current_user, login_required
 import json
 
@@ -87,10 +87,21 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('account.html', title='My Account')
+    form = SettingsForm()
+    if form.validate_on_submit():
+        # settings = json.loads(current_user.settings_json)
+        # settings['mode'] = form.mode.data
+        # settings['font'] = form.font.data
+        # settings['font_size'] = form.font_size.data
+        # current_user.settings_json = json.dumps(settings)
+        # from blog import db
+        # db.session.commit()
+        # flash('Settings updated!')
+        return redirect(url_for('confirm_deactivate'))
+    return render_template('account.html', title='My Account', form=form)
 
 
 @app.route("/create", methods=['GET', 'POST'])
@@ -109,6 +120,22 @@ def toggle_mode():
         from blog import db
         db.session.commit()
     return redirect(url_for('home'))
+
+
+@app.route("/confirm_deactivate", methods=['GET', 'POST'])
+@login_required
+def confirm_deactivate():
+    form = SettingsForm()
+    if form.validate_on_submit():
+        from blog.models import User
+        user = User.query.filter_by(username=current_user.username).first()
+        from blog import db
+        db.session.delete(user)
+        db.session.commit()
+        flash('Account deactivated. Sorry to see you go :c')
+        logout_user()  # Ensure that the current_user is logged out
+        return redirect(url_for('home'))
+    return render_template('confirm_deactivate.html', title='Confirm Deactivation', form=form)
 
 
 @app.errorhandler(404)

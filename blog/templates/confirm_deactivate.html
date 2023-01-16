@@ -1,0 +1,13 @@
+{% extends "layout.html" %} {% block content %}
+<h1>
+  {{ current_user.username }}, are you sure that you want to deactivate your
+  account?
+</h1>
+<h1>This action is IRREVERSABLE.</h1>
+<form method="POST" action="">
+  {{ form.csrf_token }}
+  <input type="submit" value="I am sure. Delete my account." />
+</form>
+<!-- Skills and Education -->
+<!-- Put the CV Download link here -->
+{% endblock content %}

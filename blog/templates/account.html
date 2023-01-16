@@ -1,3 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Account Settings</h1>
+<form method="POST" action="">
+  {{ form.csrf_token }}
+  <input type="submit" value="Delete my account." />
+</form>
 {% endblock content %}
