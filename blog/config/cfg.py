@@ -33,20 +33,18 @@ if os.environ.get("ENV_TYPE") == "OPENSHIFT" or os.environ.get("ENV_TYPE") == "S
         dbname=os.environ["MYSQL_DB_NAME"]
     )
 else:
-    prod_env_path = os.path.join(cwd, "blog", "env", "prod.env")
-    print("prod env path: ", prod_env_path)
-    if (os.path.exists(prod_env_path)):
-        load_dotenv(dotenv_path=prod_env_path)
+    if os.environ.get("ENV_TYPE") == "DEV":
+        staging_env_path = os.path.join(cwd, "blog", "env", "staging.env")
+        print("staging env path: ", staging_env_path)
+        if (os.path.exists(staging_env_path)):
+            load_dotenv(dotenv_path=staging_env_path)
+            print("staging env vars initialized from config")
+    if os.environ.get("DB_MODE") == "mysql":
+        prod_env_path = os.path.join(cwd, "blog", "env", "prod.env")
+        print("prod env path: ", prod_env_path)
+        if (os.path.exists(prod_env_path)):
+            load_dotenv(dotenv_path=prod_env_path)
         print("prod env vars initialized from config")
-
-    if os.environ.get("DB_MODE") == "postgres":
-        SQLALCHEMY_DATABASE_URI = 'postgresql://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
-            dbuser=os.environ["POSTGRESQL_USER"],
-            dbpass=os.environ["POSTGRESQL_PASSWORD"],
-            dbhost=os.environ["POSTGRESQL_ADDRESS"],
-            dbname=os.environ["POSTGRESQL_DB_NAME"]
-        )
-    elif os.environ.get("DB_MODE") == "mysql":
         SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
             dbuser=os.environ["MYSQL_USER"],
             dbpass=os.environ["MYSQL_PASSWORD"],
