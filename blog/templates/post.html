@@ -1,5 +1,11 @@
 {% extends "layout.html" %} {% block content %}
-<img src="{{ url_for('static', filename='img/' + post.image_file) }}" />
+<!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}" /> -->
+<p><a href="{{ url_for('post', post_id=post.id) }}">
+  {% if post.image_file == "default.jpg" %}
+    <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p>
+  {% else %}
+    <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
+  {% endif %}
 <p>
   "{{ post.title }}" &nbsp Author:
   <a href="{{ url_for('user', user_id = post.user.id) }}"
@@ -8,6 +14,8 @@
 </p>
 <!-- Put some media here -->
 <p>{{ post.content }}</p>
+<br />
+<h2>Comments</h2>
 {% for comment in comments %}
 <div>
   <p>
@@ -19,5 +27,13 @@
   <p>{{ comment.content }}</p>
   <p>{{ comment.date }}</p>
 </div>
-{% endfor %} {% endblock content %}
-<!-- Put comments here -->
+</br>
+{% endfor %} {% if current_user.is_authenticated %}
+<form method="POST" action="">
+  {{ form.csrf_token }}
+  <p>{{ form.content.label }} {{ form.content }}</p>
+  <p><input type="submit" value="Post Comment" /></p>
+</form>
+{% else %}
+<p><a href="{{ url_for('login') }}">Sign in</a> to add a comment.</p>
+{% endif %} {% endblock content %}

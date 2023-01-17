@@ -51,7 +51,7 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Comment('{self.date}', '{self.content}')"
+        return f"Comment('{self.author_id} on {self.date}', '{self.content}')"
 
 
 @login_manager.user_loader

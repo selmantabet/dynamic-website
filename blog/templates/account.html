@@ -1,7 +1,16 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Account Settings</h1>
-<form method="POST" action="">
-  {{ form.csrf_token }}
-  <input type="submit" value="Delete my account." />
+<form action="" method="POST" enctype="multipart/form-data">
+  <br />{{ user_settings.csrf_token }}<br />
+  <br />{{ user_settings.avatar.label }} {{ user_settings.avatar(size=32) }}<br />
+  <br /><input type="submit" name="update" value="Update Avatar." /><br />
+</form>
+<form action="" method="POST">
+  <input type="submit" name="delete_avatar" value="Delete Avatar." />
+</form>
+<br />
+<form action="" method="POST">
+  {{ deactivation.csrf_token }}
+  <input type="submit" name="deactivate" value="Delete my account." />
 </form>
 {% endblock content %}

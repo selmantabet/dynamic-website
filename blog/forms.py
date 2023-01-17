@@ -3,6 +3,17 @@ from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp
 
 
+def FileSizeLimit(max_size_in_mb):  # https://stackoverflow.com/a/67172432/11690953
+    max_bytes = max_size_in_mb*1024*1024
+
+    def file_length_check(form, field):
+        if len(field.data.read()) > max_bytes:
+            raise ValidationError(
+                f"File size must be less than {max_size_in_mb}MB")
+        field.data.seek(0)
+    return file_length_check
+
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Regexp(
         '^[a-z]{6,8}$', message='Your username should be between 6 and 8 characters long, and can only contain lowercase letters.')])
@@ -28,16 +39,22 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = StringField('Content', validators=[DataRequired()])
-    # picture = FileField('Update Picture', validators=[
-    #                     FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Post')
+    picture = FileField('Upload Picture', validators=[
+                        FileSizeLimit(max_size_in_mb=8)])
+    submit = SubmitField('Submit Post')
 
 
 class CommentForm(FlaskForm):
-    content = StringField('Content', validators=[DataRequired()])
-    submit = SubmitField('Comment')
+    content = StringField('Your comment', validators=[DataRequired()])
+    submit = SubmitField('Submit Comment')
+
+
+class Deactivation(FlaskForm):
+    # submit = SubmitField('Save')
+    deactivate = SubmitField('Deactivate Account')
 
 
 class SettingsForm(FlaskForm):
-    # submit = SubmitField('Save')
-    deactivate = SubmitField('Deactivate Account')
+    avatar = FileField('Upload Avatar', validators=[
+                       DataRequired(), FileSizeLimit(max_size_in_mb=2)])
+    submit = SubmitField('Save')

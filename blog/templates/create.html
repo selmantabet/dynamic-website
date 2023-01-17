@@ -1,3 +1,9 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Create a post :)</h1>
+<form action="" method="POST" enctype="multipart/form-data">
+  {{ form.csrf_token }} {{ form.title.label }} {{ form.title(size=32) }}<br />
+  {{ form.content.label }} {{ form.content(size=32) }}<br />
+  {{ form.picture.label }} {{ form.picture(size=32) }}<br />
+  <input type="submit" value="Submit" />
+</form>
 {% endblock content %}

@@ -10,6 +10,8 @@ if (os.path.exists(base_env_path)):
     load_dotenv(dotenv_path=base_env_path)
     print("base env vars initialized from config")
 
+DEFAULT_UPLOAD_DEST = os.path.join(cwd, "blog", "static", "uploads")
+UPLOADED_IMAGES_DEST = os.path.join(cwd, "blog", "static", "uploads")
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False  # Suppresses SQLAlchemy warnings

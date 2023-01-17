@@ -1,0 +1,39 @@
+from flask import session
+from flask_login import current_user
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+import json
+import os
+
+# File uploads based on https://flask-uploads.readthedocs.io/en/latest/
+images = UploadSet('images', IMAGES)
+
+
+def settings_updater():
+    settings = json.loads(current_user.settings_json)
+    settings['mode'] = session['mode']
+    current_user.settings_json = json.dumps(settings)
+    from blog import db
+    db.session.commit()
+    return
+
+
+def settings_loader(settings_json):
+    settings = json.loads(settings_json)
+    session.update(settings)
+    from blog import app
+    upload_dir = app.config["DEFAULT_UPLOAD_DEST"]
+    user_dir = os.path.join(upload_dir, str(current_user.id))
+    if not os.path.exists(user_dir):
+        os.makedirs(user_dir)
+    app.config["UPLOADED_IMAGES_DEST"] = user_dir
+    configure_uploads(app, images)
+    return
+
+
+def settings_clearer():
+    from blog import app
+    mode = session.get('mode')
+    session.clear()
+    session['mode'] = mode  # Retain mode to not "flashbang" the user xDDDDD
+    app.config["UPLOADED_IMAGES_DEST"] = app.config["DEFAULT_UPLOAD_DEST"]
+    return

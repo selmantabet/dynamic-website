@@ -20,3 +20,7 @@ instance/
 # IPython
 profile_default/
 ipython_config.py
+
+# For testing media uploads
+uploads/*
+!uploads/.gitkeep 
