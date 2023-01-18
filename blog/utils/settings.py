@@ -10,6 +10,8 @@ images = UploadSet('images', IMAGES)
 
 def settings_updater():
     settings = json.loads(current_user.settings_json)
+    if session.get("mode") is None:
+        session['mode'] = 'light'
     settings['mode'] = session['mode']
     current_user.settings_json = json.dumps(settings)
     from blog import db
@@ -36,4 +38,17 @@ def settings_clearer():
     session.clear()
     session['mode'] = mode  # Retain mode to not "flashbang" the user xDDDDD
     app.config["UPLOADED_IMAGES_DEST"] = app.config["DEFAULT_UPLOAD_DEST"]
+    return
+
+
+def reset_user_settings(user):
+    settings = json.loads(user.settings_json)
+    defaults = {
+        "has_avatar": False,
+        "mode": "light"
+    }
+    settings.update(defaults)
+    user.settings_json = json.dumps(settings)
+    from blog import db
+    db.session.commit()
     return

@@ -1,5 +1,26 @@
 {% extends "layout.html" %} {% block content %}
 <h1>{{ user.username }} Profile</h1>
+<img
+      src="{{ avatar }}"
+      width="100"
+    />
+<br/><br>
+<h2>Posts</h2>
+{% for post in posts %}
+<br>
+    <p><a href="{{ url_for('post', post_id=post.id) }}">
+        {% if post.image_file == "default.jpg" %}
+        <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p> -->
+        {% else %}
+        <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
+        {% endif %}
+        <p>  "{{ post.title }}"</a></p>
+        <!-- <p>by <a href="{{ url_for('user', user_id = post.user.id) }}"
+        >{{ post.user.username }}</a></p> -->
+        <p>{{ post.content }}</p>
+        <p>Number of comments: {{ post.comments|length }}</p>
+        <br>
+    {% endfor %}
 <!-- Show all user info -->
 <!-- Show all posts -->
 <!-- Under each post, show a comment counter. -->

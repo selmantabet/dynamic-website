@@ -1,5 +1,13 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Account Settings</h1>
+{% if session["has_avatar"] %}
+<br />
+<h3>Your avatar</h3>
+<img
+  src="{{ url_for('static', filename= 'uploads/' + current_user.id|string + '/avatar.jpg') }}"
+  width="50"
+/>
+{% endif %}
 <form action="" method="POST" enctype="multipart/form-data">
   <br />{{ user_settings.csrf_token }}<br />
   <br />{{ user_settings.avatar.label }} {{ user_settings.avatar(size=32) }}<br />

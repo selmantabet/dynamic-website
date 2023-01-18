@@ -9,7 +9,11 @@
     {% endif %}
     <p>  "{{ post.title }}"</a></p>
     <p>by <a href="{{ url_for('user', user_id = post.user.id) }}"
-      >{{ post.user.username }}</a></p>
+      >{{ post.user.username }}</a> <img
+      src="{{ avatar }}"
+      width="40"
+    /> </p>
     <p>{{ post.content }}</p>
+    <p>Number of comments: {{ post.comments|length }}</p>
 {% endfor %}
 {% endblock content %}

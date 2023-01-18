@@ -14,10 +14,18 @@ def allowed_file(filename):
 @app.route("/")
 @app.route("/home")  # Main portfolio page, with all admin posts showing up.
 def home():
-    from blog.models import Post, User
+    from blog.models import User
     admin = User.query.filter_by(username="admin").first()
-    posts = Post.query.filter_by(author_id=admin.id).all()
-    return render_template('home.html', posts=posts)
+    user_settings = json.loads(admin.settings_json)
+    if user_settings["has_avatar"]:
+        avatar = url_for('static', filename='uploads/' +
+                         str(admin.id) + '/avatar.jpg')
+    else:
+        avatar = url_for('static', filename='img/avatar.png')
+        # Default avatar: https://pluspng.com/png-81874.html
+    return render_template('home.html', posts=admin.post, avatar=avatar)
+
+# https://tedboy.github.io/flask/generated/flask.send_from_directory.html - for downloading files
 
 
 @app.route("/about")
@@ -30,7 +38,17 @@ def about():
 def post(post_id):
     from blog.models import Post, Comment
     post = Post.query.get_or_404(post_id)
-    comments = Comment.query.filter_by(post_id=post_id).all()
+    avatars = []
+    for comment in post.comments:
+        user_settings = json.loads(comment.user.settings_json)
+        if user_settings["has_avatar"]:
+            avatar = url_for('static', filename='uploads/' +
+                             str(comment.user.id) + '/avatar.jpg')
+        else:
+            avatar = url_for('static', filename='img/avatar.png')
+            # Default avatar: https://pluspng.com/png-81874.html
+        avatars.append(avatar)
+    packed_comments = zip(post.comments, avatars)
     form = CommentForm()
     if form.validate_on_submit():
         comment = Comment(content=form.content.data,
@@ -40,15 +58,21 @@ def post(post_id):
         db.session.commit()
         flash('Comment successful!')
         return redirect(url_for('post', post_id=post_id))
-    return render_template('post.html', post=post, comments=comments, form=form)
+    return render_template('post.html', post=post, comments=packed_comments, form=form)
 
 
 @app.route("/user/<int:user_id>")
 def user(user_id):
     from blog.models import Post, User
     user = User.query.get_or_404(user_id)
-    posts = Post.query.filter_by(author_id=user_id).all()
-    return render_template('user.html', user=user, posts=posts)
+    user_settings = json.loads(user.settings_json)
+    if user_settings["has_avatar"]:
+        avatar = url_for('static', filename='uploads/' +
+                         str(user.id) + '/avatar.jpg')
+    else:
+        avatar = url_for('static', filename='img/avatar.png')
+        # Default avatar: https://pluspng.com/png-81874.html
+    return render_template('user.html', user=user, posts=user.post, avatar=avatar)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -57,18 +81,13 @@ def register():
     if form.validate_on_submit():
         from blog.models import User
         user = User(username=form.username.data, password=form.password.data,
-                    settings_json=json.dumps({"has_avatar": False}))
+                    settings_json=json.dumps({"has_avatar": False, "mode": session["mode"]}))
         from blog import db
         db.session.add(user)
         db.session.commit()
         flash('Registration successful! You can now log in.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
-
-@app.route("/registered")
-def registered():
-    return render_template('registered.html', title='Thanks!')
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -153,12 +172,13 @@ def create():
         db.session.add(post)
         db.session.commit()
         posted = Post.query.filter_by(
-            title=form.title.data, author_id=current_user.id).first()
-        filename = images.save(form.picture.data, name=str(posted.id) + '.img')
+            title=form.title.data, author_id=current_user.id).order_by(Post.id.desc()).first()  # Get the post that was just created
+        import uuid
+        uuid_string = str(uuid.uuid4())
+        filename = images.save(form.picture.data, name=uuid_string)
         if filename is not None:
             posted.image_file = filename
             db.session.commit()
-
         flash('Post successful!')
         return redirect(url_for('post', post_id=post.id))
     return render_template('create.html', title='Create Post', form=form)
@@ -166,7 +186,10 @@ def create():
 
 @app.route("/toggle_mode")
 def toggle_mode():
-    session['mode'] = 'dark' if session.get('mode') == 'light' else 'light'
+    if session.get('mode') is None:
+        session['mode'] = 'dark'
+    else:
+        session['mode'] = 'dark' if session.get('mode') == 'light' else 'light'
     if current_user.is_authenticated:
         settings = json.loads(current_user.settings_json)
         settings['mode'] = session['mode']
@@ -183,6 +206,7 @@ def confirm_deactivate():
     settings_loader(current_user.settings_json)
     if form.validate_on_submit():
         from blog.models import User
+        # Doesn't matter if we query by id since the username is already setup to be unique
         user = User.query.filter_by(username=current_user.username).first()
         from blog import db
         db.session.delete(user)

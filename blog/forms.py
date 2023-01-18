@@ -3,13 +3,15 @@ from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp
 
 
-def FileSizeLimit(max_size_in_mb):  # https://stackoverflow.com/a/67172432/11690953
-    max_bytes = max_size_in_mb*1024*1024
+# This validation technique is based on https://stackoverflow.com/a/67172432/11690953
+def FileSizeLimit(max_size_in_mb):
+    max_bytes = max_size_in_mb*1024*1024  # Convert MB to bytes
 
     def file_length_check(form, field):
         if len(field.data.read()) > max_bytes:
             raise ValidationError(
                 f"File size must be less than {max_size_in_mb}MB")
+        # Reset the file pointer to the beginning of the file
         field.data.seek(0)
     return file_length_check
 
