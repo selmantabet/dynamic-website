@@ -1,11 +1,40 @@
 {% extends "layout.html" %} {% block content %}
 <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}" /> -->
-<p><a href="{{ url_for('post', post_id=post.id) }}">
+<div class="modal-container">
   {% if post.image_file == "default.jpg" %}
-    <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p>
+    <img
+      id="modalImg"
+      src="{{ url_for('static', filename='img/' + post.image_file) }}"
+      style="max-width: 80vw"
+    />  
   {% else %}
-    <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
+  <img
+      id="modalImg"
+      src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}"
+      style="max-width: 80vw"
+    />
   {% endif %}
+    <div id="modalID" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgID" />
+      <div id="caption"></div>
+    </div>
+</div>
+    <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"> -->
+  <!-- <div class="modal-container">
+    <img
+      id="modalImg"
+      src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}"
+      style="max-width: 80vw"
+    />
+    <div id="modalID" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgID" />
+      <div id="caption"></div>
+    </div>
+  </div> -->
+    <!-- <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p> -->
+  
 <p>
   "{{ post.title }}" &nbsp Author:
   <a href="{{ url_for('user', user_id = post.user.id) }}"
@@ -20,12 +49,15 @@
 <div>
   <p>
     Comment by:
-    <a href="{{ url_for('user', user_id = comment.author_id) }}"
-      >{{ comment.author_id }}</a
-    >
+    <a href="{{ url_for('user', user_id = comment[0].author_id) }}"
+      >{{ comment[0].user.username }}</a
+    > &nbsp <img
+    src="{{ comment[1] }}"
+    width="50"
+  />
   </p>
-  <p>{{ comment.content }}</p>
-  <p>{{ comment.date }}</p>
+  <p>{{ comment[0].content }}</p>
+  <p>{{ comment[0].date }}</p>
 </div>
 </br>
 {% endfor %} {% if current_user.is_authenticated %}
@@ -36,4 +68,9 @@
 </form>
 {% else %}
 <p><a href="{{ url_for('login') }}">Sign in</a> to add a comment.</p>
-{% endif %} {% endblock content %}
+{% endif %} 
+<script src="{{ url_for('static', filename= 'modal-handler.js') }}"></script>
+<!-- Remember this? XDDDD -->
+<!-- My own work from the CMT119 assignment makes a guest appearance -->
+{% endblock content %}
+

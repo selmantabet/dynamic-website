@@ -1,0 +1,79 @@
+/* The section concerning the shape of the modal container itself */
+.modal-container {
+    display: flex;
+    /* justify-content: center; */
+}
+#modalImg {
+    border-radius: 0px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  #modalImg:hover {opacity: 0.8;} /*Transition effect*/
+  
+  .modal {
+    display: none;
+    position: fixed; /* Shan't move upon scrolling */
+    z-index: 1; /* Push forward to top of page */
+    padding-top: 100px; /* Location of the box */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    left: 0;
+    top: 0;
+    background-color: rgb(0, 0, 0); /* Black BG */
+    background-color: rgba(0, 0, 0, 0.85); /* Little bit of transparency gives a nicer aesthetic. */
+  }
+  /* The content of the modal container */
+  .modal-content {
+    margin: auto;
+    display: block;
+    width: clamp(600px, 100%, 2300px);
+
+  } 
+  
+  #caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #bdbdbd;
+    padding: 10px 0;
+    height: 150px;
+  }
+  
+  
+  .modal-content, #caption {
+    animation-name: pop;
+    animation-duration: 0.6s;
+  }
+  /* Keyframes defined - Linear transform from none to full */
+  @keyframes pop {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+  }
+  
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+    /* Enforce full width on small screens */
+  @media only screen and (max-width: 500px){
+    .modal-content {
+      width: 100%;
+    }
+  }
