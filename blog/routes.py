@@ -69,7 +69,38 @@ def post(post_id):
     return render_template('post.html', post=post, comments=packed_comments, form=form)
 
 
-@app.route("/user/<int:user_id>")
+@app.route("/delete_post/<int:post_id>")
+@login_required
+def delete_post(post_id):
+    from blog.models import Post
+    post = Post.query.get_or_404(post_id)
+    if post.author_id != current_user.id:
+        flash("You cannot delete this post!")
+        return redirect(url_for('post', post_id=post_id))
+    from blog import db
+    db.session.delete(post)
+    db.session.commit()
+    flash("Post deleted!")
+    return redirect(url_for('home'))
+
+
+@app.route("/delete_comment/<int:comment_id>")
+@login_required
+def delete_comment(comment_id):
+    from blog.models import Comment
+    comment = Comment.query.get_or_404(comment_id)
+    post_id = comment.post.id
+    if comment.author_id != current_user.id:
+        flash("You cannot delete this comment!")
+        return redirect(url_for('post', post_id=post_id))
+    from blog import db
+    db.session.delete(comment)
+    db.session.commit()
+    flash("Comment deleted!")
+    return redirect(url_for('post', post_id=post_id))
+
+
+@ app.route("/user/<int:user_id>")
 def user(user_id):
     from blog.models import Post, User
     user = User.query.get_or_404(user_id)
@@ -80,10 +111,10 @@ def user(user_id):
     else:
         avatar = url_for('static', filename='img/avatar.png')
         # Default avatar: https://pluspng.com/png-81874.html
-    return render_template('user.html', user=user, posts=user.post, avatar=avatar)
+    return render_template('user.html', user=user, posts=user.post, avatar=avatar, comments=user.comment)
 
 
-@app.route("/register", methods=['GET', 'POST'])
+@ app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -98,7 +129,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@ app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -115,8 +146,8 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route("/logout")
-@login_required
+@ app.route("/logout")
+@ login_required
 def logout():
     flash(f'You have successfully logged out, {current_user.username}!')
     logout_user()
@@ -124,8 +155,8 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/account", methods=['GET', 'POST'])
-@login_required
+@ app.route("/account", methods=['GET', 'POST'])
+@ login_required
 def account():
     settings_loader(current_user.settings_json)
     deactivation = Deactivation()
@@ -192,7 +223,7 @@ def create():
     return render_template('create.html', title='Create Post', form=form)
 
 
-@app.route("/toggle_mode")
+@ app.route("/toggle_mode")
 def toggle_mode():
     if session.get('mode') is None:
         session['mode'] = 'dark'
@@ -207,8 +238,8 @@ def toggle_mode():
     return redirect(url_for('home'))
 
 
-@app.route("/confirm_deactivate", methods=['GET', 'POST'])
-@login_required
+@ app.route("/confirm_deactivate", methods=['GET', 'POST'])
+@ login_required
 def confirm_deactivate():
     form = Deactivation()
     settings_loader(current_user.settings_json)
@@ -230,6 +261,6 @@ def confirm_deactivate():
     return render_template('confirm_deactivate.html', title='Confirm Deactivation', form=form)
 
 
-@app.errorhandler(404)
+@ app.errorhandler(404)
 def not_found(e):
     return render_template("404.html")

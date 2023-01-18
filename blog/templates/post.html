@@ -44,7 +44,14 @@
 <!-- Put some media here -->
 <p>{{ post.content }}</p>
 <br />
-<h2>Comments</h2>
+
+
+{% if current_user.is_authenticated %}
+{% if current_user.id == post.author_id %}
+<a href="{{ url_for('delete_post', post_id=post.id) }}">Delete Post</a>
+{% endif %}
+  {% endif %}
+<h2>Comments ({{ post.comments|length }})</h2>
 {% for comment in comments %}
 <div>
   <p>
@@ -55,6 +62,11 @@
     src="{{ comment[1] }}"
     width="50"
   />
+  {% if current_user.is_authenticated %}
+  {% if current_user.id == comment[0].author_id %}
+  <a href="{{ url_for('delete_comment', comment_id=comment[0].id) }}">Delete Comment</a>
+  {% endif %}
+  {% endif %}
   </p>
   <p>{{ comment[0].content }}</p>
   <p>{{ comment[0].date }}</p>

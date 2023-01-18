@@ -21,7 +21,11 @@
         <p>Number of comments: {{ post.comments|length }}</p>
         <br>
     {% endfor %}
-<!-- Show all user info -->
-<!-- Show all posts -->
-<!-- Under each post, show a comment counter. -->
+    <br/><br>
+<h2>Comments ({{ comments|length }})</h2>
+{% for comment in comments %}
+<br>
+    <p>  "{{ comment.content }}" on <a href="{{ url_for('post', post_id = comment.post_id) }}">{{ comment.post.title }}</a></p>
+<br>
+{% endfor %}
 {% endblock content %}
