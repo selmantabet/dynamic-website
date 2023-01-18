@@ -1,7 +1,15 @@
+"""
+Config Script - Loaded upon app initialization
+
+Developed by Selman Tabet @ https://selman.io/
+------------------------------------------------
+Developed for Coursework 2 of the CMT120 course at Cardiff University
+
+Based on a config script that I developed during my time as the architect
+of the Shopify Integration Gateway at Snoonu Qatar's fleet management system (FalconFlex)
+"""
 from dotenv import load_dotenv
 import os
-
-# Based on a self-developed config script used in Snoonu Qatar's backend FalconFlex system.
 
 cwd = os.getcwd()
 base_env_path = os.path.join(cwd, "blog", "env", "base.env")

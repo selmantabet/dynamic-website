@@ -1,3 +1,11 @@
+"""
+Flask Form classes
+
+Developed by Selman Tabet @ https://selman.io/
+------------------------------------------------
+Developed for Coursework 2 of the CMT120 course at Cardiff University
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp

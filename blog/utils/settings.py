@@ -1,3 +1,11 @@
+"""
+Helper functions for user settings. Includes upload scopes and session management.
+
+Developed by Selman Tabet @ https://selman.io/
+------------------------------------------------
+Developed for Coursework 2 of the CMT120 course at Cardiff University
+"""
+
 from flask import session
 from flask_login import current_user
 from flask_uploads import UploadSet, configure_uploads, IMAGES
@@ -28,6 +36,7 @@ def settings_loader(settings_json):
     if not os.path.exists(user_dir):
         os.makedirs(user_dir)
     app.config["UPLOADED_IMAGES_DEST"] = user_dir
+    # Reconfigure uploads to use the user's upload directory
     configure_uploads(app, images)
     return
 

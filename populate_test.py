@@ -1,3 +1,11 @@
+"""
+Staging database auto-population script (For development purposes only)
+
+Developed by Selman Tabet @ https://selman.io/
+------------------------------------------------
+Developed for Coursework 2 of the CMT120 course at Cardiff University
+"""
+
 from blog import app, db
 
 # Initialize models

@@ -1,3 +1,11 @@
+"""
+Application routes
+
+Developed by Selman Tabet @ https://selman.io/
+------------------------------------------------
+Developed for Coursework 2 of the CMT120 course at Cardiff University
+"""
+
 from flask import render_template, url_for, request, redirect, flash, session
 from blog import app
 from blog.forms import RegistrationForm, LoginForm, SettingsForm, PostForm, CommentForm, Deactivation
