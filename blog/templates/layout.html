@@ -105,19 +105,19 @@
                 {% endif %} {% if session['mode'] == 'dark' %}
                 <li>
                   <a class="dropdown-item" href="{{ url_for('toggle_mode') }}"
-                    >Light Mode > <i class="fa-solid fa-sun"></i
+                    >Light Mode  <i class="fa-solid fa-sun"></i
                   ></a>
                 </li>
                 {% else %}
                 <li>
                   <a class="dropdown-item" href="{{ url_for('toggle_mode') }}"
-                    >Dark Mode > <i class="fa-solid fa-moon"></i
+                    >Dark Mode  <i class="fa-solid fa-moon"></i
                   ></a>
                 </li>
                 {% endif %}
               </ul>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link disabled">Disabled</a>
             </li>
             {% if session['mode'] == 'dark' %}
@@ -132,7 +132,7 @@
                 ><i class="fa-solid fa-moon"></i
               ></a>
             </li>
-            {% endif %}
+            {% endif %} -->
           </ul>
           <form class="d-flex" role="search">
             <input
@@ -145,20 +145,23 @@
               Search
             </button>
           </form>
+          <div>
+            <a href="{{ url_for('cv_download') }}" class="btn btn-outline-secondary">Download CV</a>
+          </div>
         </div>
       </div>
     </nav>
     <div>
       {% with messages = get_flashed_messages() %} {% if messages %}
-      <ul class="flashes">
+      <ul class="list-group">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <li class="flashes alert alert-primary" role="alert">{{ message }}</li>
         {% endfor %}
       </ul>
       {% endif %} {% endwith %}
     </div>
 
-    <div id="content">{% block content %} {% endblock %}</div>
+    <div id="content" class="container position-relative">{% block content %} {% endblock %}</div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

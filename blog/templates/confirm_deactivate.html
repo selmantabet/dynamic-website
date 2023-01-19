@@ -6,8 +6,10 @@
 <h1>This action is IRREVERSABLE.</h1>
 <form method="POST" action="">
   {{ form.csrf_token }}
-  <input type="submit" value="I am sure. Delete my account." />
+  <input
+    type="submit"
+    value="I am sure. Delete my account."
+    class="btn btn-outline-danger"
+  />
 </form>
-<!-- Skills and Education -->
-<!-- Put the CV Download link here -->
 {% endblock content %}

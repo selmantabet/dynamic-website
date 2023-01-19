@@ -1,9 +1,24 @@
 {% extends "layout.html" %} {% block content %}
 <h1>Create a post :)</h1>
 <form action="" method="POST" enctype="multipart/form-data">
-  {{ form.csrf_token }} {{ form.title.label }} {{ form.title(size=32) }}<br />
-  {{ form.content.label }} {{ form.content(size=32) }}<br />
-  {{ form.picture.label }} {{ form.picture(size=32) }}<br />
-  <input type="submit" value="Submit" />
+  {{ form.csrf_token }}
+  <div class="mb-3">
+    {{ form.title.label(class_='form-label') }} {{ form.title(size=32,
+    class_='form-control') }}
+  </div>
+  <br />
+  <div class="mb-3">
+    {{ form.content.label(class_='form-label') }} {{ form.content(size=70,
+    class_='form-control') }}
+  </div>
+  <br />
+  <div class="mb-3">
+    {{ form.picture.label(class_='form-label') }} {{ form.picture(size=32,
+    class_='form-control') }}
+  </div>
+  <br />
+  <input type="submit" class="btn btn-primary" value="Submit" />
 </form>
-{% endblock content %}
+{% for error in form.picture.errors %}
+<span style="color: red">[{{ error }}]</span>
+{% endfor %} {% endblock content %}

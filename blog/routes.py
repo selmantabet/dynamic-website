@@ -8,7 +8,7 @@ Developed for Coursework 2 of the CMT120 course at Cardiff University
 
 from flask import render_template, url_for, request, redirect, flash, session
 from blog import app
-from blog.forms import RegistrationForm, LoginForm, SettingsForm, PostForm, CommentForm, Deactivation
+from blog.forms import RegistrationForm, LoginForm, SettingsForm, PostForm, CommentForm, Deactivation, PasswordChangeForm
 from flask_login import login_user, logout_user, current_user, login_required
 from blog.utils.settings import *
 import os
@@ -24,16 +24,8 @@ def allowed_file(filename):
 def home():
     from blog.models import User
     admin = User.query.filter_by(username="admin").first()
-    user_settings = json.loads(admin.settings_json)
-    if user_settings["has_avatar"]:
-        avatar = url_for('static', filename='uploads/' +
-                         str(admin.id) + '/avatar.jpg')
-    else:
-        avatar = url_for('static', filename='img/avatar.png')
-        # Default avatar: https://pluspng.com/png-81874.html
+    avatar = url_for('static', filename='img/' + 'admin.jpg')
     return render_template('home.html', posts=admin.post, avatar=avatar)
-
-# https://tedboy.github.io/flask/generated/flask.send_from_directory.html - for downloading files
 
 
 @app.route("/about")
@@ -46,6 +38,13 @@ def about():
 def post(post_id):
     from blog.models import Post, Comment
     post = Post.query.get_or_404(post_id)
+    author_settings = json.loads(post.user.settings_json)
+    if author_settings["has_avatar"]:
+        avatar = url_for('static', filename='uploads/' +
+                         str(post.user.id) + '/avatar.jpg')
+    else:
+        avatar = url_for('static', filename='img/avatar.png')
+        # Default avatar: https://pluspng.com/png-81874.html
     avatars = []
     for comment in post.comments:
         user_settings = json.loads(comment.user.settings_json)
@@ -66,7 +65,7 @@ def post(post_id):
         db.session.commit()
         flash('Comment successful!')
         return redirect(url_for('post', post_id=post_id))
-    return render_template('post.html', post=post, comments=packed_comments, form=form)
+    return render_template('post.html', post=post, comments=packed_comments, form=form, avatar=avatar)
 
 
 @app.route("/delete_post/<int:post_id>")
@@ -100,7 +99,7 @@ def delete_comment(comment_id):
     return redirect(url_for('post', post_id=post_id))
 
 
-@ app.route("/user/<int:user_id>")
+@app.route("/user/<int:user_id>")
 def user(user_id):
     from blog.models import Post, User
     user = User.query.get_or_404(user_id)
@@ -114,7 +113,7 @@ def user(user_id):
     return render_template('user.html', user=user, posts=user.post, avatar=avatar, comments=user.comment)
 
 
-@ app.route("/register", methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -129,7 +128,23 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@ app.route("/login", methods=['GET', 'POST'])
+@app.route("/change_password", methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = PasswordChangeForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.password = form.new_password.data
+            from blog import db
+            db.session.commit()
+            flash('Password changed successfully!')
+            return redirect(url_for('login'))
+        else:
+            flash('Old password is incorrect!')
+    return render_template('change_password.html', title='Change Password', form=form)
+
+
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -146,8 +161,8 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@ app.route("/logout")
-@ login_required
+@app.route("/logout")
+@login_required
 def logout():
     flash(f'You have successfully logged out, {current_user.username}!')
     logout_user()
@@ -155,12 +170,13 @@ def logout():
     return redirect(url_for('home'))
 
 
-@ app.route("/account", methods=['GET', 'POST'])
-@ login_required
+@app.route("/account", methods=['GET', 'POST'])
+@login_required
 def account():
     settings_loader(current_user.settings_json)
     deactivation = Deactivation()
     user_settings = SettingsForm()
+    avatar_state = session["has_avatar"]
     if "delete_avatar" in request.form:
         from blog.utils.settings import images
         os.remove(os.path.join(app.config["DEFAULT_UPLOAD_DEST"], str(
@@ -191,11 +207,11 @@ def account():
             flash("Upload failed.")
         flash('Settings updated!')
         return redirect(url_for('account'))
-    return render_template('account.html', title='My Account', deactivation=deactivation, user_settings=user_settings)
+    return render_template('account.html', title='My Account', deactivation=deactivation, user_settings=user_settings, avatar_state=avatar_state)
 
 
-@ app.route("/create", methods=['GET', 'POST'])
-@ login_required
+@app.route("/create", methods=['GET', 'POST'])
+@login_required
 def create():
     settings_loader(current_user.settings_json)
     from blog.utils.settings import images
@@ -210,20 +226,21 @@ def create():
         from blog import db
         db.session.add(post)
         db.session.commit()
-        posted = Post.query.filter_by(
-            title=form.title.data, author_id=current_user.id).order_by(Post.id.desc()).first()  # Get the post that was just created
-        import uuid
-        uuid_string = str(uuid.uuid4())
-        filename = images.save(form.picture.data, name=uuid_string)
-        if filename is not None:
-            posted.image_file = filename
-            db.session.commit()
+        if (form.picture.data != '') and (form.picture.data is not None):
+            posted = Post.query.filter_by(
+                title=form.title.data, author_id=current_user.id).order_by(Post.id.desc()).first()  # Get the post that was just created
+            import uuid
+            uuid_string = str(uuid.uuid4())
+            filename = images.save(form.picture.data, name=uuid_string)
+            if filename is not None:
+                posted.image_file = filename
+                db.session.commit()
         flash('Post successful!')
         return redirect(url_for('post', post_id=post.id))
     return render_template('create.html', title='Create Post', form=form)
 
 
-@ app.route("/toggle_mode")
+@app.route("/toggle_mode")
 def toggle_mode():
     if session.get('mode') is None:
         session['mode'] = 'dark'
@@ -238,8 +255,8 @@ def toggle_mode():
     return redirect(url_for('home'))
 
 
-@ app.route("/confirm_deactivate", methods=['GET', 'POST'])
-@ login_required
+@app.route("/confirm_deactivate", methods=['GET', 'POST'])
+@login_required
 def confirm_deactivate():
     form = Deactivation()
     settings_loader(current_user.settings_json)
@@ -261,6 +278,12 @@ def confirm_deactivate():
     return render_template('confirm_deactivate.html', title='Confirm Deactivation', form=form)
 
 
-@ app.errorhandler(404)
+@app.route("/cv_download")
+def cv_download():
+    from flask import send_file
+    return send_file('static/cv.pdf', as_attachment=True)
+
+
+@app.errorhandler(404)
 def not_found(e):
     return render_template("404.html")

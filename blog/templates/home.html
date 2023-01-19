@@ -3,7 +3,7 @@
 {% for post in posts %}
   <p><a href="{{ url_for('post', post_id=post.id) }}">
     {% if post.image_file == "default.jpg" %}
-      <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p>
+      <img src="{{ url_for('static', filename='img/' + post.image_file) }}" class="img-fluid"></p>
     {% else %}
       <img src="{{ post.image_file }}" width="200" height="200"></p>
     {% endif %}
@@ -12,6 +12,7 @@
       >{{ post.user.username }}</a> <img
       src="{{ avatar }}"
       width="40"
+      class="img-fluid"
     /> </p>
     <p>{{ post.content }}</p>
     <p>Number of comments: {{ post.comments|length }}</p>

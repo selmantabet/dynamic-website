@@ -1,12 +1,23 @@
 {% extends "layout.html" %} {% block content %}
 <form method="POST" action="">
   {{ form.csrf_token }}
-  <p>{{ form.username.label }} {{ form.username }}</p>
-  <p>{{ form.password.label }} {{ form.password }}</p>
-  <p>{{ form.confirm_password.label }} {{ form.confirm_password }}</p>
-  <input type="submit" value="Register" />
+  <div class="mb-3">
+    {{ form.username.label(class_='form-label') }} {{
+    form.username(class_='form-control') }}
+  </div>
+  <div class="mb-3">
+    {{ form.password.label(class_='form-label') }} {{
+    form.password(class_='form-control') }}
+  </div>
+  <div class="mb-3">
+    {{ form.confirm_password.label(class_='form-label') }} {{
+    form.confirm_password(class_='form-control') }}
+  </div>
+  <input type="submit" class="btn btn-primary" value="Register" />
+  <div class="form-text">
+    <a href="{{url_for('login')}}">Already have an account?</a>
+  </div>
 </form>
-<p><a href="{{url_for('login')}}">Already have an account?</a></p>
 {% for error in form.username.errors %}
 <span style="color: red">[{{ error }}]</span>
 {% endfor %} {% endblock content %}

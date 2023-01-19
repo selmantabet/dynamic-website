@@ -1,15 +1,21 @@
 {% extends "layout.html" %} {% block content %}
 <form method="POST" action="">
   {{ form.csrf_token }}
-  <p>{{ form.username.label }} {{ form.username }}</p>
-  <p>{{ form.password.label }} {{ form.password }}</p>
-  <div class="field">
-    <label class="checkbox">
-      <input type="checkbox" name="remember" />
-      Remember me
-    </label>
+  <div class="mb-3">
+    {{ form.username.label(class_='form-label') }} {{
+    form.username(class_='form-control') }}
   </div>
-  <p><input type="submit" value="Login" /></p>
-  <p><a href="{{url_for('register')}}">Don't have an account?</a></p>
+  <div class="mb-3">
+    {{ form.password.label(class_='form-label') }} {{
+    form.password(class_='form-control') }}
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" name="remember" />
+    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+  </div>
+  <p><input type="submit" class="btn btn-primary" value="Login" /></p>
+  <div class="form-text">
+    <a href="{{url_for('register')}}">Don't have an account?</a>
+  </div>
 </form>
 {% endblock content %}

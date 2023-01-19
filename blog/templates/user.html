@@ -3,9 +3,14 @@
 <img
       src="{{ avatar }}"
       width="100"
+      class="img-fluid"
     />
 <br/><br>
-<h2>Posts</h2>
+{% if posts|length == 0 %}
+<h2>{{ user.username }} has not published any posts</h2>
+{% else %}
+<h2>Posts ({{ posts|length }})</h2>
+{% endif %}
 {% for post in posts %}
 <br>
     <p><a href="{{ url_for('post', post_id=post.id) }}">
@@ -21,8 +26,11 @@
         <p>Number of comments: {{ post.comments|length }}</p>
         <br>
     {% endfor %}
-    <br/><br>
+{% if comments|length == 0 %}
+<h2>{{ user.username }} has not posted any comments</h2>
+{% else %}
 <h2>Comments ({{ comments|length }})</h2>
+{% endif %}
 {% for comment in comments %}
 <br>
     <p>  "{{ comment.content }}" on <a href="{{ url_for('post', post_id = comment.post_id) }}">{{ comment.post.title }}</a></p>

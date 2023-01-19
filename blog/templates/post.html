@@ -6,12 +6,14 @@
       id="modalImg"
       src="{{ url_for('static', filename='img/' + post.image_file) }}"
       style="max-width: 80vw"
+      class="img-fluid"
     />  
   {% else %}
   <img
       id="modalImg"
       src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}"
       style="max-width: 80vw"
+      class="img-fluid"
     />
   {% endif %}
     <div id="modalID" class="modal">
@@ -39,7 +41,7 @@
   "{{ post.title }}" &nbsp Author:
   <a href="{{ url_for('user', user_id = post.user.id) }}"
     >{{ post.user.username }}</a
-  >
+  > &nbsp <img src="{{ avatar }}" width="50" class="img-fluid">
 </p>
 <!-- Put some media here -->
 <p>{{ post.content }}</p>
@@ -48,7 +50,7 @@
 
 {% if current_user.is_authenticated %}
 {% if current_user.id == post.author_id %}
-<a href="{{ url_for('delete_post', post_id=post.id) }}">Delete Post</a>
+<a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger">Delete Post</a>
 {% endif %}
   {% endif %}
 <h2>Comments ({{ post.comments|length }})</h2>
@@ -61,10 +63,11 @@
     > &nbsp <img
     src="{{ comment[1] }}"
     width="50"
+    class="img-fluid"
   />
   {% if current_user.is_authenticated %}
   {% if current_user.id == comment[0].author_id %}
-  <a href="{{ url_for('delete_comment', comment_id=comment[0].id) }}">Delete Comment</a>
+  <a href="{{ url_for('delete_comment', comment_id=comment[0].id) }}" class="btn btn-link">Delete Comment</a>
   {% endif %}
   {% endif %}
   </p>
@@ -75,8 +78,17 @@
 {% endfor %} {% if current_user.is_authenticated %}
 <form method="POST" action="">
   {{ form.csrf_token }}
-  <p>{{ form.content.label }} {{ form.content }}</p>
-  <p><input type="submit" value="Post Comment" /></p>
+  <div class="row g-3 align-items-center">
+    <div class="col-auto">
+      {{ form.content.label(class__='form-label') }}
+      </div>
+      <div class="col-auto">
+        {{ form.content(class__='form-control') }}
+      </div>
+      <div class="col-auto">
+        <input type="submit" class="btn btn-primary" value="Submit Comment" />
+      </div>
+  </div>
 </form>
 {% else %}
 <p><a href="{{ url_for('login') }}">Sign in</a> to add a comment.</p>
