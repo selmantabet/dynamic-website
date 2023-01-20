@@ -49,7 +49,7 @@ else:
         if (os.path.exists(staging_env_path)):
             load_dotenv(dotenv_path=staging_env_path)
             print("staging env vars initialized from config")
-    if os.environ.get("DB_MODE") == "mysql":
+    elif os.environ.get("ENV_TYPE") == "PROD":
         prod_env_path = os.path.join(cwd, "blog", "env", "prod.env")
         print("prod env path: ", prod_env_path)
         if (os.path.exists(prod_env_path)):
