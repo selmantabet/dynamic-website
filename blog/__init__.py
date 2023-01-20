@@ -16,8 +16,6 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '64c81e139e3c113ecf8393abeaf83028196ca82e2acf2a3a'
 
-# DB Connection changed to mysql
-basedir = os.path.abspath(os.path.dirname(__file__))
 app.config.from_object(cfg)
 print("DB connected to: ", app.config['SQLALCHEMY_DATABASE_URI'])
 db = SQLAlchemy(app)
