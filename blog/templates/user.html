@@ -19,9 +19,10 @@
         {% else %}
         <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
         {% endif %}
-        <p>  "{{ post.title }}"</a></p>
+        <h4>  "{{ post.title }}"</a></h4>
         <p>{{ post.content }}</p>
         <p>Number of comments: {{ post.comments|length }}</p>
+        <hr>
     {% endfor %}
 <br>
 {% if comments|length == 0 %}
