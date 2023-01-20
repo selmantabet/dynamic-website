@@ -45,10 +45,11 @@ def post(post_id):
     post = Post.query.get_or_404(post_id)
     author_settings = json.loads(post.user.settings_json)
     if author_settings["has_avatar"]:
-        avatar = url_for('static', filename='uploads/' +
-                         str(post.user.id) + '/avatar.jpg')
+        print("User has an avatar: " + str(post.user.id) + "/avatar.jpg")
+        author_avatar = url_for('static', filename='uploads/' +
+                                str(post.user.id) + '/avatar.jpg')
     else:
-        avatar = url_for('static', filename='img/avatar.png')
+        author_avatar = url_for('static', filename='img/avatar.png')
         # Default avatar: https://pluspng.com/png-81874.html
     avatars = []
     for comment in post.comments:
@@ -70,7 +71,7 @@ def post(post_id):
         db.session.commit()
         flash('Comment successful!')
         return redirect(url_for('post', post_id=post_id))
-    return render_template('post.html', post=post, comments=packed_comments, form=form, avatar=avatar)
+    return render_template('post.html', post=post, comments=packed_comments, form=form, author_avatar=author_avatar)
 
 
 @app.route("/delete_post/<int:post_id>")

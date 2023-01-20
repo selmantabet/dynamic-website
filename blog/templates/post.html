@@ -43,7 +43,7 @@
   "{{ post.title }}" &nbsp Author:
   <a href="{{ url_for('user', user_id = post.user.id) }}"
     >{{ post.user.username }}</a
-  > &nbsp <img src="{{ avatar }}" width="50" class="img-fluid">
+  > &nbsp <img src="{{ author_avatar }}" width="50" class="img-fluid">
 </p>
 <!-- Put some media here -->
 <p>{{ post.content }}</p>
@@ -56,6 +56,7 @@
 </form>
 {% endif %}
   {% endif %}
+  <hr>
 <h2>Comments ({{ post.comments|length }})</h2>
 {% for comment in comments %}
 <div>
