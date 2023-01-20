@@ -1,15 +1,29 @@
 {% extends "layout.html" %} {% block content %}
-<h1>
-  {{ current_user.username }}, are you sure that you want to deactivate your
-  account?
-</h1>
-<h1>This action is IRREVERSABLE.</h1>
+<div class="container text-center">
+  <img
+    title="{{ current_user.username }}, i don't feel so good :("
+    src="{{ url_for('static', filename='img/deactivate.jpg') }}"
+    alt="i don't wanna go :("
+    class="img-fluid"
+  />
+</div>
+
+<div class="text-center">
+  <h1>
+    {{ current_user.username }}, are you sure that you want to deactivate your
+    account?
+  </h1>
+  <h2>This action is IRREVERSABLE.</h2>
+</div>
+
 <form method="POST" action="">
   {{ form.csrf_token }}
-  <input
-    type="submit"
-    value="I am sure. Delete my account."
-    class="btn btn-outline-danger"
-  />
+  <div class="text-center">
+    <input
+      type="submit"
+      value="I am sure. Delete my account."
+      class="btn btn-outline-danger"
+    />
+  </div>
 </form>
 {% endblock content %}

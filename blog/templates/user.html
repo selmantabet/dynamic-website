@@ -1,18 +1,18 @@
 {% extends "layout.html" %} {% block content %}
-<h1>{{ user.username }} Profile</h1>
+<div class="container-fluid"> 
 <img
       src="{{ avatar }}"
       width="100"
       class="img-fluid"
-    />
-<br/><br>
+    /> <h1>{{ user.username }} Profile</h1>
+</div>
+<p>Member since {{ user.creation_date|time_print('join_date') }}</p>
 {% if posts|length == 0 %}
 <h2>{{ user.username }} has not published any posts</h2>
 {% else %}
 <h2>Posts ({{ posts|length }})</h2>
 {% endif %}
 {% for post in posts %}
-<br>
     <p><a href="{{ url_for('post', post_id=post.id) }}">
         {% if post.image_file == "default.jpg" %}
         <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p> -->
@@ -20,20 +20,16 @@
         <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
         {% endif %}
         <p>  "{{ post.title }}"</a></p>
-        <!-- <p>by <a href="{{ url_for('user', user_id = post.user.id) }}"
-        >{{ post.user.username }}</a></p> -->
         <p>{{ post.content }}</p>
         <p>Number of comments: {{ post.comments|length }}</p>
-        <br>
     {% endfor %}
+<br>
 {% if comments|length == 0 %}
 <h2>{{ user.username }} has not posted any comments</h2>
 {% else %}
 <h2>Comments ({{ comments|length }})</h2>
 {% endif %}
 {% for comment in comments %}
-<br>
-    <p>  "{{ comment.content }}" on <a href="{{ url_for('post', post_id = comment.post_id) }}">{{ comment.post.title }}</a></p>
-<br>
+    <p>  "{{ comment.content }}" on <a href="{{ url_for('post', post_id = comment.post_id) }}">{{ comment.post.title }}</a> - {{ comment.date|time_print('comment_date') }}</p>
 {% endfor %}
 {% endblock content %}

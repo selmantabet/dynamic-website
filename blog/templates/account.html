@@ -1,58 +1,70 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Account Settings</h1>
+<h1 class="text-center">Account Settings</h1>
+
 {% if session["has_avatar"] %}
 <br />
-<h3>Your avatar</h3>
+<h3 class="mx-auto">Your avatar</h3>
 <img
   src="{{ url_for('static', filename= 'uploads/' + current_user.id|string + '/avatar.jpg') }}"
-  width="50"
-  class="img-fluid"
+  width="100"
+  class="img-fluid mx-auto"
 />
 {% endif %}
-<form action="" method="POST" enctype="multipart/form-data">
-  <br />{{ user_settings.csrf_token }}<br />
-  <div class="mb-3">
-    <br />{{ user_settings.avatar.label(class_='form-label') }} {{
-    user_settings.avatar(size=32, class_='form-control') }}
-  </div>
-  <input
-    type="submit"
-    name="update"
-    value="Update Avatar."
-    class="btn btn-outline-primary"
-  /><br />
-</form>
-<br />
-<form action="" method="POST">
-  {% if avatar_state %}
-  <input
-    type="submit"
-    name="delete_avatar"
-    value="Delete Avatar."
-    class="btn btn-outline-warning"
-  />
-  {% else %}
-  <input
-    type="submit"
-    name="delete_avatar"
-    value="Delete Avatar."
-    class="btn btn-outline-warning"
-    disabled
-  />
-  {% endif %}
-</form>
-<br />
-<a href="{{ url_for('change_password') }}" class="btn btn-primary"
-  >Change Password</a
->
-<br /><br />
-<form action="" method="POST">
-  {{ deactivation.csrf_token }}
-  <input
-    type="submit"
-    name="deactivate"
-    value="Delete my account."
-    class="btn btn-danger"
-  />
-</form>
+<div class="mx-auto">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {{ user_settings.csrf_token }}
+    <div class="mb-3">
+      <br />{{ user_settings.avatar.label(class_='form-label') }} {{
+      user_settings.avatar(size=32, class_='form-control') }}
+    </div>
+    <input
+      type="submit"
+      name="update"
+      value="Update Avatar."
+      class="btn btn-outline-primary"
+    /><br />
+  </form>
+  <br />
+  <form action="" method="POST">
+    {% if avatar_state %}
+    <input
+      type="submit"
+      name="delete_avatar"
+      value="Delete Avatar."
+      class="btn btn-outline-warning"
+    />
+    {% else %}
+    <input
+      type="submit"
+      name="delete_avatar"
+      value="Delete Avatar."
+      class="btn btn-outline-warning"
+      disabled
+    />
+    {% endif %}
+  </form>
+  {% for error in user_settings.avatar.errors %}
+  <span style="color: red">[{{ error }}]</span>
+  {% endfor %}
+  <hr />
+  <form action="{{ url_for('change_password') }}">
+    <div class="text-center">
+      <input type="submit" class="btn btn-primary" value="Change Password" />
+    </div>
+  </form>
+
+  <br />
+  <form action="" method="POST">
+    {{ deactivation.csrf_token }}
+    <div class="text-center">
+      <input
+        type="submit"
+        name="deactivate"
+        value="Delete my account."
+        class="btn btn-danger"
+      />
+    </div>
+  </form>
+  <br />
+</div>
 {% endblock content %}

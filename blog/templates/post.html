@@ -2,19 +2,21 @@
 <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}" /> -->
 <div class="modal-container">
   {% if post.image_file == "default.jpg" %}
-    <img
+    <!-- <img
       id="modalImg"
       src="{{ url_for('static', filename='img/' + post.image_file) }}"
       style="max-width: 80vw"
       class="img-fluid"
-    />  
+    />   -->
   {% else %}
+  <div class="mx-auto">
   <img
       id="modalImg"
       src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}"
-      style="max-width: 80vw"
-      class="img-fluid"
+      style="max-width: 40vw"
+      class="img-fluid object-fit-contain border rounded"
     />
+  </div>
   {% endif %}
     <div id="modalID" class="modal">
       <span class="close">&times;</span>
@@ -45,34 +47,34 @@
 </p>
 <!-- Put some media here -->
 <p>{{ post.content }}</p>
-<br />
 
 
 {% if current_user.is_authenticated %}
 {% if current_user.id == post.author_id %}
-<a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger">Delete Post</a>
+<form action="{{ url_for('delete_post', post_id=post.id) }}">
+  <input type="submit" class="btn btn-danger" value="Delete Post" />
+</form>
 {% endif %}
   {% endif %}
 <h2>Comments ({{ post.comments|length }})</h2>
 {% for comment in comments %}
 <div>
   <p>
-    Comment by:
     <a href="{{ url_for('user', user_id = comment[0].author_id) }}"
       >{{ comment[0].user.username }}</a
     > &nbsp <img
     src="{{ comment[1] }}"
     width="50"
     class="img-fluid"
-  />
+  />   <span class="container"> {{ comment[0].content }} </span>
   {% if current_user.is_authenticated %}
   {% if current_user.id == comment[0].author_id %}
   <a href="{{ url_for('delete_comment', comment_id=comment[0].id) }}" class="btn btn-link">Delete Comment</a>
   {% endif %}
   {% endif %}
-  </p>
-  <p>{{ comment[0].content }}</p>
-  <p>{{ comment[0].date }}</p>
+</p>
+  
+<p title="{{ comment[0].date|time_print }}">{{ comment[0].date|time_print('comment_date') }}</p>
 </div>
 </br>
 {% endfor %} {% if current_user.is_authenticated %}

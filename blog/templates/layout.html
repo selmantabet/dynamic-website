@@ -134,6 +134,7 @@
             </li>
             {% endif %} -->
           </ul>
+          <div class="hstack gap-3">
           <form class="d-flex" role="search">
             <input
               class="form-control me-2"
@@ -145,9 +146,11 @@
               Search
             </button>
           </form>
+          <div class="vr"></div>
           <div>
             <a href="{{ url_for('cv_download') }}" class="btn btn-outline-secondary">Download CV</a>
           </div>
+        </div>
         </div>
       </div>
     </nav>
@@ -155,13 +158,13 @@
       {% with messages = get_flashed_messages() %} {% if messages %}
       <ul class="list-group">
         {% for message in messages %}
-        <li class="flashes alert alert-primary" role="alert">{{ message }}</li>
+        <li class="flashes alert alert-primary text-center" role="alert">{{ message }}</li>
         {% endfor %}
       </ul>
       {% endif %} {% endwith %}
     </div>
-
-    <div id="content" class="container position-relative">{% block content %} {% endblock %}</div>
+    <br />
+    <div id="content" class="container position-relative vstack gap-2 col-md-6 mx-auto">{% block content %} {% endblock %}</div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -184,6 +187,7 @@
     ></script>
   </body>
   <footer>
+    <br>
     <div class="container">
       <div class="row">
         <div class="col-md-12">

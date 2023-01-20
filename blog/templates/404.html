@@ -1,7 +1,13 @@
 {% extends "layout.html" %} {% block title %}Page Not Found{% endblock %} {%
 block content %}
-
+<img
+  title="y u do dis :'c"
+  src="{{ url_for('static', filename='img/sad.jpg') }}"
+  alt="y u do dis :'c"
+/>
 <h1>The page you are looking for was not found.</h1>
-<p><a href="{{ url_for('home') }}">Go back to the Home Page.</a></p>
+<a href="{{ url_for('home') }}" class="btn btn-primary mx-auto"
+  >Go back to the Home Page.</a
+>
 
 {% endblock content %}

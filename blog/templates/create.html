@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Create a post :)</h1>
+<h1>Create a post</h1>
 <form action="" method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
   <div class="mb-3">
@@ -17,7 +17,9 @@
     class_='form-control') }}
   </div>
   <br />
-  <input type="submit" class="btn btn-primary" value="Submit" />
+  <div class="text-center">
+    <input type="submit" class="btn btn-primary" value="Submit" />
+  </div>
 </form>
 {% for error in form.picture.errors %}
 <span style="color: red">[{{ error }}]</span>

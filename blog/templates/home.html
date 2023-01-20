@@ -8,12 +8,12 @@
       <img src="{{ post.image_file }}" width="200" height="200"></p>
     {% endif %}
     <p>  "{{ post.title }}"</a></p>
-    <p>by <a href="{{ url_for('user', user_id = post.user.id) }}"
-      >{{ post.user.username }}</a> <img
+    <p>by  <a href="{{ url_for('user', user_id = post.user.id) }}"
+      >{{ post.user.username }}</a><span class="container"> <img
       src="{{ avatar }}"
       width="40"
       class="img-fluid"
-    /> </p>
+    /> </span></p>
     <p>{{ post.content }}</p>
     <p>Number of comments: {{ post.comments|length }}</p>
 {% endfor %}

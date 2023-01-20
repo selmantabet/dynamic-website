@@ -18,6 +18,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True, nullable=False)
     hashed_password = db.Column(db.String(128))
+    creation_date = db.Column(
+        db.DateTime, nullable=False, default=datetime.utcnow)
     settings_json = db.Column(db.String(200), default="{}")
     post = db.relationship('Post', backref='user',
                            lazy=True, cascade="all, delete")

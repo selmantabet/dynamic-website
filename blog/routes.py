@@ -11,6 +11,7 @@ from blog import app
 from blog.forms import RegistrationForm, LoginForm, SettingsForm, PostForm, CommentForm, Deactivation, PasswordChangeForm
 from flask_login import login_user, logout_user, current_user, login_required
 from blog.utils.settings import *
+import babel
 import os
 import json
 
@@ -22,6 +23,8 @@ def allowed_file(filename):
 @app.route("/")
 @app.route("/home")  # Main portfolio page, with all admin posts showing up.
 def home():
+    # The current_page session key will be used by the color mode toggler to return to the same page
+    session['current_page'] = url_for('home')
     from blog.models import User
     admin = User.query.filter_by(username="admin").first()
     avatar = url_for('static', filename='img/' + 'admin.jpg')
@@ -30,12 +33,14 @@ def home():
 
 @app.route("/about")
 def about():
+    session['current_page'] = url_for('about')
     return render_template('about.html', title='About')
 
 
 # Full display of a single post (with comments)
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
+    session['current_page'] = url_for('post', post_id=post_id)
     from blog.models import Post, Comment
     post = Post.query.get_or_404(post_id)
     author_settings = json.loads(post.user.settings_json)
@@ -76,6 +81,11 @@ def delete_post(post_id):
     if post.author_id != current_user.id:
         flash("You cannot delete this post!")
         return redirect(url_for('post', post_id=post_id))
+    img = post.image_file
+    if img != 'default.jpg':  # If the post has an image, delete it
+        upload_dir = app.config["DEFAULT_UPLOAD_DEST"]
+        user_dir = os.path.join(upload_dir, str(current_user.id))
+        os.remove(os.path.join(user_dir, img))
     from blog import db
     db.session.delete(post)
     db.session.commit()
@@ -101,6 +111,7 @@ def delete_comment(comment_id):
 
 @app.route("/user/<int:user_id>")
 def user(user_id):
+    session['current_page'] = url_for('user', user_id=user_id)
     from blog.models import Post, User
     user = User.query.get_or_404(user_id)
     user_settings = json.loads(user.settings_json)
@@ -115,6 +126,7 @@ def user(user_id):
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    session['current_page'] = url_for('register')
     form = RegistrationForm()
     if form.validate_on_submit():
         from blog.models import User
@@ -131,6 +143,7 @@ def register():
 @app.route("/change_password", methods=['GET', 'POST'])
 @login_required
 def change_password():
+    session['current_page'] = url_for('change_password')
     form = PasswordChangeForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
@@ -146,6 +159,7 @@ def change_password():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    session['current_page'] = url_for('login')
     form = LoginForm()
     if form.validate_on_submit():
         from blog.models import User
@@ -166,13 +180,13 @@ def login():
 def logout():
     flash(f'You have successfully logged out, {current_user.username}!')
     logout_user()
-    settings_clearer()
     return redirect(url_for('home'))
 
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    session['current_page'] = url_for('account')
     settings_loader(current_user.settings_json)
     deactivation = Deactivation()
     user_settings = SettingsForm()
@@ -205,7 +219,7 @@ def account():
             db.session.commit()
         else:
             flash("Upload failed.")
-        flash('Settings updated!')
+        flash('Avatar updated!')
         return redirect(url_for('account'))
     return render_template('account.html', title='My Account', deactivation=deactivation, user_settings=user_settings, avatar_state=avatar_state)
 
@@ -213,6 +227,7 @@ def account():
 @app.route("/create", methods=['GET', 'POST'])
 @login_required
 def create():
+    session['current_page'] = url_for('create')
     settings_loader(current_user.settings_json)
     from blog.utils.settings import images
     form = PostForm()
@@ -252,12 +267,13 @@ def toggle_mode():
         current_user.settings_json = json.dumps(settings)
         from blog import db
         db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(session['current_page'])
 
 
 @app.route("/confirm_deactivate", methods=['GET', 'POST'])
 @login_required
 def confirm_deactivate():
+    session['current_page'] = url_for('confirm_deactivate')
     form = Deactivation()
     settings_loader(current_user.settings_json)
     if form.validate_on_submit():
@@ -269,7 +285,6 @@ def confirm_deactivate():
         db.session.commit()
         import shutil
         upload_dir = app.config["DEFAULT_UPLOAD_DEST"]
-        print("Upload dir:", upload_dir)
         user_dir = os.path.join(upload_dir, str(current_user.id))
         shutil.rmtree(user_dir)
         logout_user()  # Ensure that the current_user is logged out
@@ -287,3 +302,14 @@ def cv_download():
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html")
+
+
+@app.template_filter('time_print')
+def format_datetime(value, format='full_date'):
+    if format == 'full_date':
+        format = "EEEE, d MMMM y 'at' HH:mm"
+    elif format == 'comment_date':
+        format = "dd.MM.y HH:mm"
+    elif format == 'join_date':
+        format = "dd.MM.y"
+    return babel.dates.format_datetime(value, format)
