@@ -22,5 +22,6 @@ profile_default/
 ipython_config.py
 
 # For testing media uploads
+post_content/
 blog/static/uploads/*
 !blog/static/uploads/.gitkeep 
