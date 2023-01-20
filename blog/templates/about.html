@@ -1,5 +1,95 @@
 {% extends "layout.html" %} {% block content %}
-<h1>This is About Me page</h1>
-<!-- Skills and Education -->
-<!-- Put the CV Download link here -->
+<h1>About me</h1>
+<p>
+  I’m a person who dabbles in many skills in search for something fascinating.
+  I’ve done bits in media production, entrepreneurship, administration, office
+  work and programming (both low and high level). I have graduated with a
+  Bachelor’s of Science degree in Computer Engineering from HBKU. I have also
+  studied at universities like Texas A&M University at Qatar and Carnegie Mellon
+  University - Qatar.
+</p>
+<div id="born-with-computers" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="10000">
+      <img
+        src="{{ url_for('static', filename= 'img/about/1.jpg') }}"
+        class="d-block w-100"
+        alt="..."
+      />
+    </div>
+    <div class="carousel-item" data-bs-interval="8000">
+      <img
+        src="{{ url_for('static', filename= 'img/about/2.jpeg') }}"
+        class="d-block w-100"
+        alt="..."
+      />
+    </div>
+    <div class="carousel-item" data-bs-interval="8000">
+      <img
+        src="{{ url_for('static', filename= 'img/about/3.jpeg') }}"
+        class="d-block w-100"
+        alt="..."
+      />
+    </div>
+    <div class="carousel-item" data-bs-interval="8000">
+      <img
+        src="{{ url_for('static', filename= 'img/about/4.jpeg') }}"
+        class="d-block w-100"
+        alt="..."
+      />
+    </div>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#born-with-computers"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#born-with-computers"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<p>
+  I’m a fan of everything tech and always keep tabs on new stuff; semiconductor
+  development, graphics technologies, audiophile gear etc. I also love video
+  games, perfumery and music. I’m currently based in Wales, UK studying for a
+  Master’s in Computing and IT Management at Cardiff University.
+</p>
+
+<hr />
+<h3>Programming Languages</h3>
+<ul class="list-group">
+  <li class="list-group-item">Python</li>
+  <li class="list-group-item">C/C++</li>
+  <li class="list-group-item">Java</li>
+  <li class="list-group-item">JavaScript</li>
+  <li class="list-group-item">MATLAB</li>
+  <li class="list-group-item">Assembly (8051)</li>
+  <li class="list-group-item">Machine-level code (ARM ISA)</li>
+</ul>
+<br />
+<h3>Markup Languages</h3>
+<ul class="list-group">
+  <li class="list-group-item">LaTeX</li>
+  <li class="list-group-item">HTML/CSS</li>
+  <li class="list-group-item">Markdown</li>
+</ul>
+<hr />
+<h3>Education</h3>
+<ul>
+  <li>Cardiff University - MSc Computing and IT Management</li>
+  <li>Hamad Bin Khalifa University (HBKU) - BSc Computer Engineering</li>
+  <li>Texas A&M University at Qatar - Cross-registered from HBKU</li>
+  <li>Carnegie Mellon University Qatar - Cross-registered from HBKU</li>
+</ul>
+<br />
 {% endblock content %}
