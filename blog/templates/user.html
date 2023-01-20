@@ -17,9 +17,13 @@
         {% if post.image_file == "default.jpg" %}
         <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p> -->
         {% else %}
-        <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p>
+        <div class="mx-auto">
+            <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="700">
+        </div>
+        
         {% endif %}
-        <h4>  "{{ post.title }}"</a></h4>
+    </p>
+        <h4 class="mx-auto">  "{{ post.title }}"</a></h4>
         <p>{{ post.content }}</p>
         <p>Number of comments: {{ post.comments|length }}</p>
         <hr>
