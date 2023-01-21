@@ -1,5 +1,4 @@
 {% extends "layout.html" %} {% block content %}
-<!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}" /> -->
 <div class="modal-container">
   {% if post.image_file == "default.jpg" %}
     <!-- <img
@@ -24,27 +23,12 @@
       <div id="caption"></div>
     </div>
 </div>
-    <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"> -->
-  <!-- <div class="modal-container">
-    <img
-      id="modalImg"
-      src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}"
-      style="max-width: 80vw"
-    />
-    <div id="modalID" class="modal">
-      <span class="close">&times;</span>
-      <img class="modal-content" id="imgID" />
-      <div id="caption"></div>
-    </div>
-  </div> -->
-    <!-- <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="600"></p> -->
   
 <h2 class="mx-auto">
   "{{ post.title }}" </h2>
   <div class="mx-auto">&nbsp Author: <a href="{{ url_for('user', user_id = post.user.id) }}">{{ post.user.username }}</a
   > &nbsp <img src="{{ author_avatar }}" width="50" class="img-fluid"></div>
 
-<!-- Put some media here -->
 <p>{{ post.content }}</p>
 
 

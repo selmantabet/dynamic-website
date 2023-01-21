@@ -1,11 +1,12 @@
 {% extends "layout.html" %} {% block title %}Page Not Found{% endblock %} {%
 block content %}
+<!-- Image Reference: https://www.reddit.com/r/sadcats/comments/inlycw/sad_cat_with_a_gun/ -->
 <img
   title="no >:c"
   src="{{ url_for('static', filename='img/no.jpg') }}"
   alt="You shall not pass."
 />
-<h1>You're not supposed to be here. Shoo, go away.</h1>
+<h1>You're not supposed to be here. Shoo. Go away.</h1>
 <a href="{{ url_for('home') }}" class="btn btn-primary mx-auto"
   >Go back to the Home Page.</a
 >

@@ -24,7 +24,7 @@
         {% endif %}
     </p>
         <h4 class="mx-auto">  "{{ post.title }}"</a></h4>
-        <p>{{ post.content }}</p>
+        <p class="text-truncate">{{ post.content }}</p>
         <p>Number of comments: {{ post.comments|length }}</p>
         <hr>
     {% endfor %}
