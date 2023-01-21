@@ -42,7 +42,7 @@
   <hr>
 <h2>Comments ({{ post.comments|length }})</h2>
 {% for comment in comments %}
-<div>
+<div class="border border-primary rounded">
   <p>
     <a href="{{ url_for('user', user_id = comment[0].author_id) }}"
       >{{ comment[0].user.username }}</a
