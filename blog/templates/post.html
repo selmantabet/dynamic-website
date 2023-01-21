@@ -27,7 +27,7 @@
 <h2 class="mx-auto">
   "{{ post.title }}" </h2>
   <div class="mx-auto">&nbsp Author: <a href="{{ url_for('user', user_id = post.user.id) }}">{{ post.user.username }}</a
-  > &nbsp <img src="{{ author_avatar }}" width="50" class="img-fluid"></div>
+  > &nbsp <img src="{{ author_avatar }}" width="50" class="img-fluid rounded"></div>
 
 <p>{{ post.content }}</p>
 
@@ -49,7 +49,7 @@
     > &nbsp <img
     src="{{ comment[1] }}"
     width="50"
-    class="img-fluid"
+    class="img-fluid rounded"
   />   <span class="container"> {{ comment[0].content }} </span>
   {% if current_user.is_authenticated %}
   {% if current_user.id == comment[0].author_id %}
