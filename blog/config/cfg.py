@@ -27,7 +27,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 SQLALCHEMY_TRACK_MODIFICATIONS = False  # Suppresses SQLAlchemy warnings
 
 # OpenShift deployment
-if os.environ.get("ENV_TYPE") == "OPENSHIFT" or os.environ.get("ENV_TYPE") == "STAGING":
+if os.environ.get("ENV_TYPE") == "PROD" or os.environ.get("ENV_TYPE") == "STAGING":
     if os.environ["ENV_TYPE"] == "STAGING":
         print("Staging deployment detected.")
     else:
