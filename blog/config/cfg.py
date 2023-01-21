@@ -6,7 +6,7 @@ Developed by Selman Tabet @ https://selman.io/
 Developed for Coursework 2 of the CMT120 course at Cardiff University
 
 Based on a config script that I developed during my time as the architect
-of the Shopify Integration Gateway at Snoonu Qatar's fleet management system (FalconFlex)
+of the Shopify Integration Gateway for Snoonu Qatar's Fleet Management System (FalconFlex)
 """
 from dotenv import load_dotenv
 import os

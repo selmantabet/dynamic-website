@@ -1,23 +1,24 @@
 """
-Application router
+Application Router
 
 Developed by Selman Tabet @ https://selman.io/
 ------------------------------------------------
 Developed for Coursework 2 of the CMT120 course at Cardiff University
 
 Contains the routes to the main pages of the application.
-All other pages are defined in their respective routes files under blog/routes.
+All other pages are defined in their respective route files under blog/routes.
 """
 
-from flask import render_template, url_for, redirect, session
+from flask import render_template, url_for, redirect, session, send_file
 from blog import app
 from flask_login import current_user
+
 from blog.utils.settings import *
 from blog.utils.errors import *
 from blog.utils.formatting import *
 
-import babel
 import json
+
 # Import all routes
 from blog.routes.accounts import *
 from blog.routes.auth import *
@@ -59,5 +60,4 @@ def toggle_mode():
 
 @app.route("/cv_download")
 def cv_download():
-    from flask import send_file
     return send_file('static/cv.pdf', as_attachment=True)
