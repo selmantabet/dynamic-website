@@ -25,3 +25,4 @@ ipython_config.py
 post_content/
 blog/static/uploads/*
 !blog/static/uploads/.gitkeep 
+junk/

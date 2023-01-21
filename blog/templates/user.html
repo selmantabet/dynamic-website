@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block content %}
-<div class="container-fluid"> 
+<div class="container-fluid bg-secondary bg-gradient rounded"> 
 <img
       src="{{ avatar }}"
       width="100"
@@ -18,7 +18,7 @@
         <!-- <img src="{{ url_for('static', filename='img/' + post.image_file) }}"></p> -->
         {% else %}
         <div class="mx-auto">
-            <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="700">
+            <img src="{{ url_for('static', filename= 'uploads/' + post.author_id|string + '/' + post.image_file) }}" width="625">
         </div>
         
         {% endif %}
