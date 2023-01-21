@@ -13,9 +13,8 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Regexp
 from blog.utils.settings import images
 
+
 # This validation technique is based on https://stackoverflow.com/a/67172432/11690953
-
-
 def FileSizeLimit(max_size_in_mb):
     max_bytes = max_size_in_mb*1024*1024  # Convert MB to bytes
 
