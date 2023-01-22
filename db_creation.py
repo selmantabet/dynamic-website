@@ -34,10 +34,17 @@ with app.app_context():
     input("Press Enter to create the database..")
     db.create_all()
 
-    admin = User(username="admin", password=os.environ.get("ADMIN_PASSWORD"), creation_date=datetime.datetime(2023, 1, 15, 18, 0, 0),
-                 settings_json=json.dumps({"has_avatar": False, "mode": "dark"}))
-    user = User(username="user", password=os.environ.get("ADMIN_PASSWORD"),
-                settings_json=json.dumps({"has_avatar": False, "mode": "dark"}))
+    try:
+        admin = User(username="admin", password=os.environ.get("ADMIN_PASSWORD"), creation_date=datetime.datetime(2023, 1, 15, 18, 0, 0),
+                     settings_json=json.dumps({"has_avatar": False, "mode": "dark"}))
+        user = User(username="user", password=os.environ.get("ADMIN_PASSWORD"),
+                    settings_json=json.dumps({"has_avatar": False, "mode": "dark"}))
+    except AttributeError:  # If ADMIN_PASSWORD was not set, prompt the user to enter the password
+        pw = input("Enter admin password: ")
+        admin = User(username="admin", password=pw, settings_json=json.dumps(
+            {"has_avatar": False, "mode": "dark"}))
+        user = User(username="user", password=pw, settings_json=json.dumps(
+            {"has_avatar": False, "mode": "dark"}))
 
     users = [admin, user]
 
