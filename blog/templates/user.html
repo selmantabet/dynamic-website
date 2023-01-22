@@ -35,7 +35,7 @@
 <h2>Comments ({{ comments|length }})</h2>
 {% endif %}
 {% for comment in comments %}
-<div class="border border-primary rounded">
+<div class="border border-primary rounded p-3">
     <p>  "{{ comment.content }}" on <a href="{{ url_for('post', post_id = comment.post_id) }}">{{ comment.post.title }}</a> - {{ comment.date|time_print('comment_date') }}</p>
 </div>
     {% endfor %}

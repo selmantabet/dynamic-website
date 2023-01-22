@@ -42,7 +42,7 @@
   <hr>
 <h2>Comments ({{ post.comments|length }})</h2>
 {% for comment in comments %}
-<div class="border border-primary rounded">
+<div class="border border-primary rounded p-3">
   <p>
     <a href="{{ url_for('user', user_id = comment[0].author_id) }}"
       >{{ comment[0].user.username }}</a
@@ -58,7 +58,7 @@
   {% endif %}
 </p>
   
-<p title="{{ comment[0].date|time_print }}">{{ comment[0].date|time_print('comment_date') }}</p>
+<p title="{{ comment[0].date|time_print }}" class="text-end">posted on {{ comment[0].date|time_print('comment_date') }}</p>
 </div>
 </br>
 {% endfor %} {% if current_user.is_authenticated %}
