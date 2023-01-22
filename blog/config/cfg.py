@@ -18,9 +18,17 @@ if (os.path.exists(base_env_path)):
     load_dotenv(dotenv_path=base_env_path)
     print("base env vars initialized from config")
 
-# I have inquired about the file storage situation here: https://stackoverflowteams.com/c/comsc/questions/1759
-# But nobody responded to my inquiry with an acceptable method, so I'm just going to use the static folder.
+"""
+I have inquired about the file storage situation here: https://stackoverflowteams.com/c/comsc/questions/1759
+But nobody responded to my inquiry with an acceptable method, so I'm just going to use the static folder.
+Note that this implementation is problematic as it will require re-uploading images upon every deployment.
+So re-building a container image will require re-creating the database and re-uploading the media files.
+Again, I tried inquiring about using a university-provided CDN, and I can't use my own CDN because
+the coursework guidelines explicity state that I should not use any external services.
+"""
+
 DEFAULT_UPLOAD_DEST = os.path.join(cwd, "blog", "static", "uploads")
+# Below is just the initial value, but it will be overwritten by user-specific paths.
 UPLOADED_IMAGES_DEST = os.path.join(cwd, "blog", "static", "uploads")
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -53,7 +61,7 @@ else:  # Local deployment
             dbhost=os.environ["MYSQL_ADDRESS"],
             dbname=os.environ["MYSQL_DB_NAME"]
         )
-    elif os.environ.get("ENV_TYPE") == "PROD":
+    elif os.environ.get("ENV_TYPE") == "SETUP":
         # Production Mode - Local Flask server connected to Remote Production DB
         # This is only for the initial setup of the remote DB
         prod_env_path = os.path.join(cwd, "blog", "env", "prod.env")

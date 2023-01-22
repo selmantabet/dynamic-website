@@ -18,7 +18,7 @@ app.config['SECRET_KEY'] = '64c81e139e3c113ecf8393abeaf83028196ca82e2acf2a3a'
 
 app.config.from_object(cfg)
 if os.environ.get("ENV_TYPE") == "OPENSHIFT" or os.environ.get("ENV_TYPE") == "STAGING":
-    print("DB connected to Cardiff MySQL server: ",
+    print("App is connected to MySQL server: ",
           os.environ["MYSQL_DB_NAME"], " on ", os.environ["MYSQL_ADDRESS"])
 else:
     print("DB connected to: ", app.config['SQLALCHEMY_DATABASE_URI'])
