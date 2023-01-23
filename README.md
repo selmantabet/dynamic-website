@@ -4,9 +4,17 @@ Username: c22076452
 
 Link to website: http://c22076452-cmt120-cw2-prod-c22076452-cmt120-cw2.apps.openshift.cs.cf.ac.uk/
 
+#### [Website Quality Report](c22076452_report.pdf)
+
 ---
 
-### References:
+## Demo Video
+
+## [![Website Video Demo](https://i.ytimg.com/vi/Q3_VkIxhObg/maxresdefault.jpg)](https://youtu.be/Q3_VkIxhObg "Website Video Demo")
+
+---
+
+### References - Source Code:
 
 - Navbar Implementation based on Bootstrap 5.3 Docs (https://getbootstrap.com/docs/5.3/components/navbar/)
 - File upload mechanism based on Flask-Uploads Docs (https://flask-uploads.readthedocs.io/en/latest/)
@@ -41,7 +49,15 @@ Install the required packages using pip.
 pip install -r requirements.txt
 ```
 
+Run the following command to create the database:
+
+```
+python db_creation.py
+```
+
 Then press Enter to confirm creation.
+You will be prompted to enter an Admin password. This password will be used to set up the Admin account.
+
 Then, run the Flask application:
 
 ```
@@ -78,4 +94,8 @@ On the shell of the deployment container, run the following commands:
 python db_creation.py
 ```
 
-You will be prompted to enter an Admin password. This password will be used to set up the Admin account. You may now serve the application through a pod restart.
+You should see the address and name of the target database, ensure that they are the correct parameters.
+Then press Enter to confirm creation.
+You will be prompted to enter an Admin password. This password will be used to set up the Admin account.
+
+You may now serve the application through a pod restart.
