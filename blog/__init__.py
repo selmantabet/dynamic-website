@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '64c81e139e3c113ecf8393abeaf83028196ca82e2acf2a3a'
 
 app.config.from_object(cfg)
-if os.environ.get("ENV_TYPE") == "OPENSHIFT" or os.environ.get("ENV_TYPE") == "STAGING":
+if os.environ.get("ENV_TYPE") == "PROD" or os.environ.get("ENV_TYPE") == "STAGING":
     print("App is connected to MySQL server: ",
           os.environ["MYSQL_DB_NAME"], " on ", os.environ["MYSQL_ADDRESS"])
 else:
