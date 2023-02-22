@@ -82,7 +82,7 @@ Inject the following environment variables into the deployment:
 - `MYSQL_ADDRESS` - MySQL Database Address
 - `MYSQL_DB_NAME` - MySQL Database Name
 - `MYSQL_USER` - MySQL Database Address
-- `MYSQL_PASSWORD` - MySQL Database Address
+- `MYSQL_PASSWORD` - MySQL Database Password
 
 The database must be in MySQL, other databases can work by modifying the dialect and driver parts of the URI in `cfg.py`. Just ensure that the environment variables are set up properly and that the database URI is correctly formatted using the logs.
 
