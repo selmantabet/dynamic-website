@@ -5,7 +5,7 @@ Developed by Selman Tabet @ https://selman.io/
 ------------------------------------------------
 Developed for Coursework 2 of the CMT120 course at Cardiff University
 """
-
+from blog import app, db
 from flask import session
 from flask_login import current_user
 from flask_uploads import UploadSet, configure_uploads, IMAGES
@@ -22,7 +22,6 @@ def settings_updater():
         session['mode'] = 'light'
     settings['mode'] = session['mode']
     current_user.settings_json = json.dumps(settings)
-    from blog import db
     db.session.commit()
     return
 
@@ -30,7 +29,6 @@ def settings_updater():
 def settings_loader(settings_json):
     settings = json.loads(settings_json)
     session.update(settings)
-    from blog import app
     upload_dir = app.config["DEFAULT_UPLOAD_DEST"]
     user_dir = os.path.join(upload_dir, str(current_user.id))
     if not os.path.exists(user_dir):
@@ -42,7 +40,6 @@ def settings_loader(settings_json):
 
 
 def settings_clearer():
-    from blog import app
     mode = session.get('mode')
     session.clear()
     session['mode'] = mode  # Retain mode to not "flashbang" the user xDDDDD
@@ -58,6 +55,5 @@ def reset_user_settings(user):
     }
     settings.update(defaults)
     user.settings_json = json.dumps(settings)
-    from blog import db
     db.session.commit()
     return

@@ -7,8 +7,9 @@ Developed for Coursework 2 of the CMT120 course at Cardiff University
 """
 
 from flask import render_template, url_for, redirect, flash, session
-from blog import app
+from blog import app, db
 from blog.forms import PostForm, CommentForm
+from blog.models import Post, Comment
 from flask_login import current_user, login_required
 from blog.utils.settings import *
 from blog.utils.files import *
@@ -20,7 +21,6 @@ import json
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     session['current_page'] = url_for('post', post_id=post_id)
-    from blog.models import Post, Comment
     post = Post.query.get_or_404(post_id)
     author_settings = json.loads(post.user.settings_json)
     if author_settings["has_avatar"]:
@@ -44,7 +44,7 @@ def post(post_id):
     if form.validate_on_submit():
         comment = Comment(content=form.content.data,
                           post_id=post_id, author_id=current_user.id)
-        from blog import db
+
         db.session.add(comment)
         db.session.commit()
         flash('Comment successful!')
@@ -56,7 +56,6 @@ def post(post_id):
 @app.route("/delete_post/<int:post_id>")
 @login_required
 def delete_post(post_id):
-    from blog.models import Post
     post = Post.query.get_or_404(post_id)
     if post.author_id != current_user.id:
         flash("You cannot delete this post!")
@@ -66,7 +65,6 @@ def delete_post(post_id):
         upload_dir = app.config["DEFAULT_UPLOAD_DEST"]
         user_dir = os.path.join(upload_dir, str(current_user.id))
         os.remove(os.path.join(user_dir, img))
-    from blog import db
     db.session.delete(post)
     db.session.commit()
     flash("Post deleted!")
@@ -79,16 +77,13 @@ def delete_post(post_id):
 def create():
     session['current_page'] = url_for('create')
     settings_loader(current_user.settings_json)
-    from blog.utils.settings import images
     form = PostForm()
-    from blog.models import Post
     if form.validate_on_submit():
         if form.picture.data is not None:
             if not allowed_file(form.picture.data.filename):
                 flash("File type not allowed")
         post = Post(title=form.title.data, content=form.content.data,
                     author_id=current_user.id)
-        from blog import db
         db.session.add(post)
         db.session.commit()
         if (form.picture.data != '') and (form.picture.data is not None):

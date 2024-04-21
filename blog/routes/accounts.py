@@ -7,8 +7,9 @@ Developed for Coursework 2 of the CMT120 course at Cardiff University
 """
 
 from flask import render_template, url_for, request, redirect, flash, session
-from blog import app
+from blog import app, db
 from blog.forms import SettingsForm, Deactivation
+from blog.models import Post, User
 from flask_login import logout_user, current_user, login_required
 from blog.utils.settings import *
 import os
@@ -19,7 +20,6 @@ import json
 @app.route("/user/<int:user_id>")
 def user(user_id):
     session['current_page'] = url_for('user', user_id=user_id)
-    from blog.models import Post, User
     user = User.query.get_or_404(user_id)
     user_settings = json.loads(user.settings_json)
     if user_settings["has_avatar"]:
@@ -41,20 +41,17 @@ def account():
     user_settings = SettingsForm()
     avatar_state = session["has_avatar"]
     if "delete_avatar" in request.form:
-        from blog.utils.settings import images
         os.remove(os.path.join(app.config["DEFAULT_UPLOAD_DEST"], str(
             current_user.id), "avatar.jpg"))
         settings = json.loads(current_user.settings_json)
         settings['has_avatar'] = False
         current_user.settings_json = json.dumps(settings)
-        from blog import db
         db.session.commit()
         flash("Avatar deleted.")
         return redirect(url_for('account'))
     if ("deactivate" in request.form) and (deactivation.validate_on_submit()):
         return redirect(url_for('confirm_deactivate'))
     if ("update" in request.form) and (user_settings.validate_on_submit()):
-        from blog.utils.settings import images
         avatar_path = os.path.join(app.config["DEFAULT_UPLOAD_DEST"], str(
             current_user.id), "avatar.jpg")
         if os.path.isfile(avatar_path):
@@ -64,7 +61,6 @@ def account():
             settings = json.loads(current_user.settings_json)
             settings['has_avatar'] = True
             current_user.settings_json = json.dumps(settings)
-            from blog import db
             db.session.commit()
         else:
             flash("Upload failed.")
@@ -81,10 +77,8 @@ def confirm_deactivate():
     form = Deactivation()
     settings_loader(current_user.settings_json)
     if form.validate_on_submit():
-        from blog.models import User
         # Doesn't matter if we query by id since the username is already setup to be unique
         user = User.query.filter_by(username=current_user.username).first()
-        from blog import db
         db.session.delete(user)
         db.session.commit()
         import shutil
