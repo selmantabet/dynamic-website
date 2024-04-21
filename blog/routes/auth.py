@@ -12,18 +12,19 @@ from blog.forms import RegistrationForm, LoginForm, PasswordChangeForm
 from flask_login import login_user, logout_user, current_user, login_required
 from blog.utils.settings import *
 import json
-
+from blog.models import User
+from blog import db
 
 # Signup page
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     session['current_page'] = url_for('register')
     form = RegistrationForm()
     if form.validate_on_submit():
-        from blog.models import User
         user = User(username=form.username.data, password=form.password.data,
                     settings_json=json.dumps({"has_avatar": False, "mode": session["mode"]}))
-        from blog import db
         db.session.add(user)
         db.session.commit()
         flash('Registration successful! You can now log in.')
@@ -40,7 +41,6 @@ def change_password():
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.new_password.data
-            from blog import db
             db.session.commit()
             flash('Password changed successfully!')
             return redirect(url_for('login'))
@@ -55,7 +55,6 @@ def login():
     session['current_page'] = url_for('login')
     form = LoginForm()
     if form.validate_on_submit():
-        from blog.models import User
         user = User.query.filter_by(username=form.username.data).first()
         remember = True if request.form.get('remember') else False
         if user is not None and user.verify_password(form.password.data):
